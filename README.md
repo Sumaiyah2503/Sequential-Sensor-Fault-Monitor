@@ -37,3 +37,12 @@ The system was tested using 15 test cases:
 
 ## State Flow
 NORMAL → WARNING → FAULT → RECOVERY → NORMAL
+
+## Setup Steps
+
+1. Open the project notebook in Google Colab.
+2. Run the Python cells in sequence.
+3. The system generates sensor data for Temperature, Pressure, and Vibration.
+4. Sensor readings are compared with predefined threshold values.
+5. The Finite State Machine determines the current system state.
+6. View the detection results and state transitions.
