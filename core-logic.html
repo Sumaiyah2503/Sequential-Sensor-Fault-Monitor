@@ -4,1064 +4,695 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Synchronous Sequential Circuit</title>
+<title>Core Digital Logic - FSM and ASM</title>
 
 <style>
-
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #ffffff;
-    overflow-x: hidden;
-
-    background:
-        radial-gradient(circle at 15% 20%,
-            rgba(0, 190, 255, 0.18),
-            transparent 28%),
-        radial-gradient(circle at 85% 75%,
-            rgba(0, 255, 200, 0.12),
-            transparent 30%),
-        linear-gradient(
-            135deg,
-            #020811 0%,
-            #061522 45%,
-            #020b14 100%
-        );
-
-    position: relative;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #07111f;
+    color: #eaf2ff;
+    line-height: 1.6;
 }
 
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-
-    background-image:
-        linear-gradient(
-            90deg,
-            rgba(80, 200, 255, 0.07) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            rgba(80, 200, 255, 0.07) 1px,
-            transparent 1px
-        );
-
-    background-size: 45px 45px;
-
-    mask-image:
-        radial-gradient(
-            circle at center,
-            black 20%,
-            transparent 85%
-        );
-
-    pointer-events: none;
+header {
+    text-align: center;
+    padding: 45px 20px;
+    background: #0d1b2a;
+    border-bottom: 2px solid #38bdf8;
 }
 
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
+header h1 {
+    margin: 0;
+    font-size: 32px;
+    color: #7dd3fc;
+}
 
-    background:
-        linear-gradient(
-            90deg,
-            transparent 10%,
-            rgba(0, 220, 255, 0.12) 10.2%,
-            transparent 10.4%
-        ),
-        linear-gradient(
-            0deg,
-            transparent 72%,
-            rgba(0, 220, 255, 0.10) 72.2%,
-            transparent 72.4%
-        );
-
-    background-size: 180px 180px;
-
-    opacity: 0.7;
-    pointer-events: none;
+header p {
+    margin-top: 10px;
+    color: #cbd5e1;
 }
 
 .container {
-    width: 92%;
-    max-width: 1100px;
+    max-width: 1050px;
     margin: auto;
-    padding: 35px 0 40px;
-
-    position: relative;
-    z-index: 2;
+    padding: 25px;
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.header .main-title {
-    font-size: clamp(28px, 5vw, 48px);
-    font-weight: 800;
-    letter-spacing: 2px;
-
-    text-shadow:
-        0 0 12px rgba(0, 220, 255, 0.6),
-        0 0 30px rgba(0, 220, 255, 0.25);
-}
-
-.header .subtitle {
-    margin-top: 10px;
-    font-size: clamp(17px, 3vw, 23px);
-    color: #79dff5;
-    letter-spacing: 1px;
-}
-
-.header .project-name {
-    margin-top: 8px;
-    font-size: 15px;
-    color: #a7c5d0;
-}
-
-.dashboard {
-    position: relative;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(10, 30, 45, 0.92),
-            rgba(3, 15, 25, 0.94)
-        );
-
-    border: 1px solid rgba(80, 220, 255, 0.25);
-    border-radius: 25px;
-
-    padding: 28px;
-
-    box-shadow:
-        0 25px 70px rgba(0, 0, 0, 0.55),
-        inset 0 0 40px rgba(0, 180, 255, 0.04);
-
-    backdrop-filter: blur(15px);
-}
-
-.section-title {
-    color: #7ce7ff;
-    font-size: 19px;
-    margin-bottom: 18px;
-    letter-spacing: 0.5px;
-}
-
-.inputs {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-}
-
-.sensor {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20, 55, 70, 0.72),
-            rgba(5, 20, 30, 0.8)
-        );
-
-    border: 1px solid rgba(100, 220, 255, 0.16);
-
-    border-radius: 18px;
-    padding: 20px;
-
-    box-shadow:
-        inset 0 0 20px rgba(0, 220, 255, 0.04),
-        0 10px 25px rgba(0, 0, 0, 0.25);
-
-    transition: 0.25s;
-}
-
-.sensor:hover {
-    transform: translateY(-3px);
-
-    border-color: rgba(100, 230, 255, 0.4);
-
-    box-shadow:
-        0 10px 30px rgba(0, 200, 255, 0.12);
-}
-
-.sensor label {
-    display: block;
-    color: #b9dce6;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.sensor input {
-    width: 100%;
-
-    padding: 13px;
-
-    border-radius: 10px;
-    border: 1px solid rgba(100, 220, 255, 0.2);
-
-    background: rgba(0, 8, 15, 0.75);
-
-    color: white;
-
-    font-size: 16px;
-    outline: none;
-}
-
-.sensor input:focus {
-    border-color: #4ddfff;
-
-    box-shadow:
-        0 0 12px rgba(0, 220, 255, 0.18);
-}
-
-.buttons {
-    display: flex;
-    gap: 15px;
-    margin-top: 25px;
-}
-
-button {
-    flex: 1;
-
-    padding: 15px;
-
-    border: none;
-    border-radius: 12px;
-
-    font-size: 15px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition: 0.25s;
-}
-
-.clock {
-    background:
-        linear-gradient(
-            135deg,
-            #0799c5,
-            #05c8d9
-        );
-
-    color: white;
-
-    box-shadow:
-        0 0 20px rgba(0, 210, 255, 0.2);
-}
-
-.clock:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 0 28px rgba(0, 220, 255, 0.35);
-}
-
-.reset {
-    background:
-        linear-gradient(
-            135deg,
-            #263c4b,
-            #172833
-        );
-
-    color: #d5e9ef;
-}
-
-.reset:hover {
-    transform: translateY(-2px);
-}
-
-.result {
-    margin-top: 25px;
-
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-
-    gap: 15px;
-}
-
-.card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(8, 27, 38, 0.85),
-            rgba(3, 15, 23, 0.9)
-        );
-
-    border: 1px solid rgba(100, 210, 240, 0.13);
-
-    border-radius: 15px;
-
-    padding: 18px;
-}
-
-.card span {
-    display: block;
-
-    color: #83aebb;
-
-    font-size: 12px;
-
-    margin-bottom: 8px;
-
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-}
-
-.card strong {
-    font-size: 20px;
-
-    color: #f2fbff;
-}
-
-.transition {
-    grid-column: span 2;
-
-    text-align: center;
-
-    padding: 23px;
-
-    border-color:
-        rgba(0, 220, 255, 0.25);
-}
-
-.transition strong {
-    font-size: clamp(20px, 4vw, 28px);
-
-    color: #73e6ff;
-
-    text-shadow:
-        0 0 12px rgba(0, 220, 255, 0.25);
-}
-
-/* =========================
-   FSM PANEL
-========================= */
-
-.fsm {
-    margin-top: 28px;
-
-    padding: 22px;
-
-    border-radius: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(7, 32, 43, 0.78),
-            rgba(2, 15, 24, 0.9)
-        );
-
-    border: 1px solid rgba(80, 220, 255, 0.18);
-
-    text-align: center;
-}
-
-.fsm-description {
-    color: #8eabb5;
-    font-size: 13px;
-    margin-bottom: 20px;
-}
-
-/* FSM diagram */
-
-.fsm-diagram {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-
-    margin-top: 20px;
-}
-
-.state-box {
-    min-width: 120px;
-
-    padding: 15px 12px;
-
+section {
+    background: #0d1b2a;
+    border: 1px solid #29445f;
     border-radius: 14px;
-
-    border: 2px solid rgba(100, 220, 255, 0.35);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20, 55, 70, 0.9),
-            rgba(4, 20, 30, 0.95)
-        );
-
-    box-shadow:
-        0 0 18px rgba(0, 200, 255, 0.08);
+    padding: 25px;
+    margin-bottom: 25px;
 }
 
-.state-box strong {
-    display: block;
-    color: #e9fbff;
-    font-size: 16px;
+h2 {
+    color: #7dd3fc;
+    border-left: 4px solid #38bdf8;
+    padding-left: 12px;
 }
 
-.state-box small {
-    display: block;
-    margin-top: 5px;
-    color: #8eabb5;
-    font-size: 11px;
+h3 {
+    color: #bae6fd;
+}
+
+p, li {
+    color: #dbeafe;
+}
+
+ul {
+    padding-left: 25px;
+}
+
+.definition {
+    background: #102a43;
+    padding: 18px;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+
+.flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 25px 0;
+}
+
+.state {
+    padding: 16px 25px;
+    min-width: 130px;
+    text-align: center;
+    border: 2px solid #38bdf8;
+    border-radius: 10px;
+    background: #122a40;
+    font-weight: bold;
 }
 
 .arrow {
     font-size: 25px;
-    color: #71e5ff;
+    color: #7dd3fc;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    border: 1px solid #38556e;
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background: #16324f;
+    color: #bae6fd;
+}
+
+td {
+    background: #0a1a2b;
+}
+
+.diagram {
+    text-align: center;
+    margin: 25px auto;
+}
+
+.circle {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 125px;
+    height: 75px;
+    border: 3px solid #38bdf8;
+    border-radius: 50%;
+    background: #102a43;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.logic {
+    background: #081827;
+    border: 1px solid #38556e;
+    border-radius: 10px;
+    padding: 22px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.asm-box {
+    width: 220px;
+    margin: 15px auto;
+    padding: 18px;
+    border: 2px solid #38bdf8;
+    border-radius: 8px;
+    background: #102a43;
     font-weight: bold;
 }
 
-.fsm-note {
-    margin-top: 18px;
-
-    color: #a9d8e3;
-
-    font-size: 13px;
-
-    line-height: 1.6;
+.decision {
+    width: 150px;
+    height: 90px;
+    margin: 30px auto;
+    transform: rotate(45deg);
+    border: 2px solid #7dd3fc;
+    background: #173b50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* =========================
-   ASM PANEL
-========================= */
-
-.asm {
-    margin-top: 28px;
-
-    padding: 22px;
-
-    border-radius: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(7, 32, 43, 0.78),
-            rgba(2, 15, 24, 0.9)
-        );
-
-    border: 1px solid rgba(80, 220, 255, 0.18);
-
-    text-align: center;
+.decision span {
+    transform: rotate(-45deg);
+    font-weight: bold;
 }
 
-.asm-flow {
+.note {
+    padding: 15px;
+    background: #102a43;
+    border-left: 4px solid #38bdf8;
     margin-top: 15px;
-
-    font-size: clamp(14px, 2.5vw, 18px);
-
-    color: #b8effa;
-
-    letter-spacing: 0.5px;
-
-    line-height: 1.8;
 }
 
-.asm-description {
-    margin-top: 12px;
-
-    color: #8eabb5;
-
-    font-size: 13px;
-}
-
-/* =========================
-   LOGIC INFORMATION
-========================= */
-
-.logic-panel {
-    margin-top: 28px;
-
-    padding: 22px;
-
-    border-radius: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(7, 32, 43, 0.78),
-            rgba(2, 15, 24, 0.9)
-        );
-
-    border: 1px solid rgba(80, 220, 255, 0.18);
-}
-
-.logic-list {
-    margin-top: 12px;
-    padding-left: 20px;
-
-    color: #b8dce5;
-
-    line-height: 1.8;
-}
-
-.logic-list li {
-    margin-bottom: 5px;
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-.footer {
+footer {
     text-align: center;
-
-    margin-top: 20px;
-
-    color: #6d8e99;
-
-    font-size: 12px;
+    padding: 25px;
+    color: #94a3b8;
+    border-top: 1px solid #29445f;
 }
 
-/* =========================
-   MOBILE
-========================= */
+@media(max-width:600px) {
 
-@media (max-width: 750px) {
-
-    .inputs {
-        grid-template-columns: 1fr;
+    header h1 {
+        font-size: 25px;
     }
 
-    .result {
-        grid-template-columns: 1fr;
+    .container {
+        padding: 15px;
     }
 
-    .transition {
-        grid-column: span 1;
-    }
-
-    .buttons {
-        flex-direction: column;
-    }
-
-    .dashboard {
-        padding: 20px;
-    }
-
-    .fsm-diagram {
-        flex-direction: column;
+    section {
+        padding: 18px;
     }
 
     .arrow {
         transform: rotate(90deg);
     }
-
-    .state-box {
-        width: 85%;
-    }
 }
-
 </style>
 </head>
 
-
 <body>
+
+<header>
+    <h1>CORE DIGITAL LOGIC</h1>
+    <p>Finite State Machine (FSM) and Algorithmic State Machine (ASM)</p>
+</header>
 
 <div class="container">
 
-    <!-- HEADER -->
+<!-- Sequential Logic -->
 
-    <div class="header">
+<section>
+<h2>1. Sequential Logic</h2>
 
-        <div class="main-title">
-            SYNCHRONOUS SEQUENTIAL CIRCUIT
-        </div>
+<p>
+A sequential circuit is a digital circuit whose output depends on
+the present input and the previous state of the circuit.
+</p>
 
-        <div class="subtitle">
-            Sequential Sensor Fault Monitor
-        </div>
+<div class="logic">
+    <b>Present State + Input → Next State</b>
+</div>
 
-        <div class="project-name">
-            FSM + ASM Based Sequential Fault Detection System
-        </div>
+<h3>Important Elements</h3>
 
-    </div>
+<ul>
+    <li>Input</li>
+    <li>Output</li>
+    <li>State</li>
+    <li>Flip-Flops / Memory Elements</li>
+    <li>Clock</li>
+</ul>
 
+</section>
 
-    <!-- MAIN DASHBOARD -->
 
-    <div class="dashboard">
+<!-- FSM -->
 
-        <h2 class="section-title">
-            Sensor Input Monitoring
-        </h2>
+<section>
+<h2>2. Finite State Machine (FSM)</h2>
 
+<div class="definition">
+<p>
+A Finite State Machine is a mathematical model used to represent
+the behavior of a sequential digital system using a finite number
+of states and transitions.
+</p>
+</div>
 
-        <!-- SENSOR INPUTS -->
+<h3>Main Components</h3>
 
-        <div class="inputs">
+<ul>
+    <li><b>State:</b> Represents the current condition of the system.</li>
+    <li><b>Input:</b> Signal that affects the transition.</li>
+    <li><b>Output:</b> Result produced by the system.</li>
+    <li><b>Transition:</b> Movement from one state to another.</li>
+    <li><b>Clock:</b> Controls state changes in synchronous systems.</li>
+</ul>
 
-            <div class="sensor">
+</section>
 
-                <label>
-                    🌡️ Temperature (°C)
-                </label>
 
-                <input
-                    id="temperature"
-                    type="number"
-                    value="30"
-                >
+<!-- FSM State Diagram -->
 
-            </div>
+<section>
+<h2>3. FSM State Diagram</h2>
 
+<p>
+A state diagram graphically represents the states and transitions
+of a finite state machine.
+</p>
 
-            <div class="sensor">
+<div class="flow">
 
-                <label>
-                    💨 Pressure (kPa)
-                </label>
+    <div class="state">STATE A</div>
 
-                <input
-                    id="pressure"
-                    type="number"
-                    value="100"
-                >
+    <div class="arrow">→</div>
 
-            </div>
+    <div class="state">STATE B</div>
 
+    <div class="arrow">→</div>
 
-            <div class="sensor">
-
-                <label>
-                    📳 Vibration (mm/s)
-                </label>
-
-                <input
-                    id="vibration"
-                    type="number"
-                    value="2"
-                >
-
-            </div>
-
-        </div>
-
-
-        <!-- CONTROL BUTTONS -->
-
-        <div class="buttons">
-
-            <button
-                class="clock"
-                onclick="clockPulse()"
-            >
-                ⚡ CLOCK PULSE
-            </button>
-
-            <button
-                class="reset"
-                onclick="resetSystem()"
-            >
-                ↻ RESET
-            </button>
-
-        </div>
-
-
-        <!-- RESULTS -->
-
-        <div class="result">
-
-            <div class="card">
-
-                <span>
-                    Sensor Condition
-                </span>
-
-                <strong id="condition">
-                    NORMAL
-                </strong>
-
-            </div>
-
-
-            <div class="card">
-
-                <span>
-                    Previous State
-                </span>
-
-                <strong id="previous">
-                    NORMAL
-                </strong>
-
-            </div>
-
-
-            <div class="card">
-
-                <span>
-                    Current State
-                </span>
-
-                <strong id="current">
-                    NORMAL
-                </strong>
-
-            </div>
-
-
-            <div class="card">
-
-                <span>
-                    Clock Status
-                </span>
-
-                <strong id="clock">
-                    Waiting
-                </strong>
-
-            </div>
-
-
-            <div class="card transition">
-
-                <span>
-                    State Transition
-                </span>
-
-                <strong id="transition">
-                    NORMAL → NORMAL
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <!-- FSM FLOW -->
-
-        <div class="fsm">
-
-            <h2 class="section-title">
-                FSM State Diagram
-            </h2>
-
-            <div class="fsm-description">
-                FSM defines the system states and the transitions between them.
-            </div>
-
-            <div class="fsm-diagram">
-
-                <div class="state-box">
-                    <strong>NORMAL</strong>
-                    <small>Initial State</small>
-                </div>
-
-                <div class="arrow">→</div>
-
-                <div class="state-box">
-                    <strong>WARNING</strong>
-                    <small>First Abnormal</small>
-                </div>
-
-                <div class="arrow">→</div>
-
-                <div class="state-box">
-                    <strong>FAULT</strong>
-                    <small>Continued Abnormal</small>
-                </div>
-
-                <div class="arrow">→</div>
-
-                <div class="state-box">
-                    <strong>RECOVERY</strong>
-                    <small>Normal After Fault</small>
-                </div>
-
-                <div class="arrow">→</div>
-
-                <div class="state-box">
-                    <strong>NORMAL</strong>
-                    <small>Restored State</small>
-                </div>
-
-            </div>
-
-            <div class="fsm-note">
-                Transitions are evaluated according to the sensor condition
-                and occur synchronously when a clock pulse is applied.
-            </div>
-
-        </div>
-
-
-        <!-- ASM FLOW -->
-
-        <div class="asm">
-
-            <h2 class="section-title">
-                ASM State Flow
-            </h2>
-
-            <div class="asm-flow">
-                NORMAL → WARNING → FAULT → RECOVERY → NORMAL
-            </div>
-
-            <div class="asm-description">
-                ASM represents the sequential decision-making flow of the system.
-            </div>
-
-        </div>
-
-
-        <!-- CORE LOGIC -->
-
-        <div class="logic-panel">
-
-            <h2 class="section-title">
-                Core Digital Logic
-            </h2>
-
-            <ul class="logic-list">
-
-                <li>
-                    Sensor values are compared with predefined threshold values.
-                </li>
-
-                <li>
-                    The sensor condition is classified as NORMAL or ABNORMAL.
-                </li>
-
-                <li>
-                    FSM determines the current state and next-state transition.
-                </li>
-
-                <li>
-                    ASM represents the sequential decision-making process.
-                </li>
-
-                <li>
-                    State changes occur only when a clock pulse is applied.
-                </li>
-
-            </ul>
-
-        </div>
-
-    </div>
-
-
-    <div class="footer">
-        Sequential Sensor Fault Monitor • FSM + ASM Based Synchronous Sequential Circuit
-    </div>
+    <div class="state">STATE C</div>
 
 </div>
 
+<p style="text-align:center;">
+The arrows represent <b>state transitions</b>.
+</p>
 
-<script>
+</section>
 
-/* =========================
-   INITIAL STATE
-========================= */
 
-let currentState = "NORMAL";
+<!-- State Table -->
 
+<section>
+<h2>4. FSM State Transition Table</h2>
 
-/* =========================
-   SENSOR CONDITION
-========================= */
+<p>
+The state transition table represents the relationship between
+present state, input and next state.
+</p>
 
-function getCondition() {
+<table>
 
-    const temperature =
-        Number(
-            document.getElementById("temperature").value
-        );
+<tr>
+<th>Present State</th>
+<th>Input</th>
+<th>Next State</th>
+</tr>
 
-    const pressure =
-        Number(
-            document.getElementById("pressure").value
-        );
+<tr>
+<td>A</td>
+<td>0</td>
+<td>A</td>
+</tr>
 
-    const vibration =
-        Number(
-            document.getElementById("vibration").value
-        );
+<tr>
+<td>A</td>
+<td>1</td>
+<td>B</td>
+</tr>
 
+<tr>
+<td>B</td>
+<td>0</td>
+<td>A</td>
+</tr>
 
-    if (
-        temperature > 50 ||
-        pressure < 90 ||
-        pressure > 110 ||
-        vibration > 5
-    ) {
+<tr>
+<td>B</td>
+<td>1</td>
+<td>C</td>
+</tr>
 
-        return "ABNORMAL";
+<tr>
+<td>C</td>
+<td>0</td>
+<td>A</td>
+</tr>
 
-    }
+<tr>
+<td>C</td>
+<td>1</td>
+<td>C</td>
+</tr>
 
-    return "NORMAL";
-}
+</table>
 
+</section>
 
-/* =========================
-   SYNCHRONOUS FSM + ASM
-========================= */
 
-function clockPulse() {
+<!-- Moore -->
 
-    const condition = getCondition();
+<section>
+<h2>5. Moore Machine</h2>
 
-    const previousState = currentState;
+<div class="definition">
 
+<p>
+In a Moore machine, the output depends only on the present state.
+</p>
 
-    /*
-       FSM + ASM STATE TRANSITIONS
+<div class="logic">
 
-       NORMAL + NORMAL
-       → NORMAL
+<b>Present State → Output</b>
 
-       NORMAL + ABNORMAL
-       → WARNING
+</div>
 
-       WARNING + NORMAL
-       → NORMAL
+</div>
 
-       WARNING + ABNORMAL
-       → FAULT
+</section>
 
-       FAULT + NORMAL
-       → RECOVERY
 
-       FAULT + ABNORMAL
-       → FAULT
+<!-- Mealy -->
 
-       RECOVERY + NORMAL
-       → NORMAL
+<section>
+<h2>6. Mealy Machine</h2>
 
-       RECOVERY + ABNORMAL
-       → FAULT
-    */
+<div class="definition">
 
+<p>
+In a Mealy machine, the output depends on both the present state
+and the input.
+</p>
 
-    if (currentState === "NORMAL") {
+<div class="logic">
 
-        if (condition === "ABNORMAL") {
+<b>Present State + Input → Output</b>
 
-            currentState = "WARNING";
+</div>
 
-        }
+</div>
 
-        else {
+</section>
 
-            currentState = "NORMAL";
 
-        }
+<!-- Comparison -->
 
-    }
+<section>
+<h2>7. Moore vs Mealy</h2>
 
+<table>
 
-    else if (currentState === "WARNING") {
+<tr>
+<th>Feature</th>
+<th>Moore</th>
+<th>Mealy</th>
+</tr>
 
-        if (condition === "ABNORMAL") {
+<tr>
+<td>Output depends on</td>
+<td>Present State</td>
+<td>Present State + Input</td>
+</tr>
 
-            currentState = "FAULT";
+<tr>
+<td>Output associated with</td>
+<td>State</td>
+<td>Transition</td>
+</tr>
 
-        }
+<tr>
+<td>Response</td>
+<td>State dependent</td>
+<td>Input and state dependent</td>
+</tr>
 
-        else {
+</table>
 
-            currentState = "NORMAL";
+</section>
 
-        }
 
-    }
+<!-- ASM -->
 
+<section>
+<h2>8. Algorithmic State Machine (ASM)</h2>
 
-    else if (currentState === "FAULT") {
+<div class="definition">
 
-        if (condition === "NORMAL") {
+<p>
+An Algorithmic State Machine is a graphical representation used
+to describe the sequence of operations and decisions in a
+synchronous digital system.
+</p>
 
-            currentState = "RECOVERY";
+</div>
 
-        }
+<h3>Basic ASM Elements</h3>
 
-        else {
+<ul>
 
-            currentState = "FAULT";
+<li>
+<b>State Box:</b>
+Represents operations performed during a particular state.
+</li>
 
-        }
+<li>
+<b>Decision Box:</b>
+Represents a condition used to determine the next path.
+</li>
 
-    }
+<li>
+<b>Conditional Output Box:</b>
+Represents an output generated when a specific condition is true.
+</li>
 
+<li>
+<b>Flow Lines:</b>
+Show the sequence between states and decisions.
+</li>
 
-    else if (currentState === "RECOVERY") {
+</ul>
 
-        if (condition === "NORMAL") {
+</section>
 
-            currentState = "NORMAL";
 
-        }
+<!-- ASM Chart -->
 
-        else {
+<section>
+<h2>9. ASM Chart Example</h2>
 
-            currentState = "FAULT";
+<div class="diagram">
 
-        }
+<div class="asm-box">
+STATE A<br>
+Perform Operation
+</div>
 
-    }
+<div style="font-size:25px;">↓</div>
 
+<div class="decision">
+<span>Input = 1?</span>
+</div>
 
-    /* UPDATE DISPLAY */
+<div class="flow">
 
-    document.getElementById("condition")
-        .textContent = condition;
+<div class="state">
+YES → STATE B
+</div>
 
-    document.getElementById("previous")
-        .textContent = previousState;
+<div class="state">
+NO → STATE A
+</div>
 
-    document.getElementById("current")
-        .textContent = currentState;
+</div>
 
-    document.getElementById("clock")
-        .textContent = "Applied";
+</div>
 
-    document.getElementById("transition")
-        .textContent =
-        previousState + " → " + currentState;
-}
+<div class="note">
 
+The ASM chart shows both the <b>state operation</b> and the
+<b>decision condition</b> that controls the next state.
 
-/* =========================
-   RESET
-========================= */
+</div>
 
-function resetSystem() {
+</section>
 
-    currentState = "NORMAL";
 
-    document.getElementById("condition")
-        .textContent = "NORMAL";
+<!-- Synchronous -->
 
-    document.getElementById("previous")
-        .textContent = "NORMAL";
+<section>
+<h2>10. Synchronous FSM</h2>
 
-    document.getElementById("current")
-        .textContent = "NORMAL";
+<p>
+In a synchronous FSM, state transitions take place according to
+a clock signal.
+</p>
 
-    document.getElementById("clock")
-        .textContent = "Waiting";
+<div class="logic">
 
-    document.getElementById("transition")
-        .textContent =
-        "NORMAL → NORMAL";
-}
+INPUT
+<br>
+↓
+<br>
+<b>Next-State Logic</b>
+<br>
+↓
+<br>
+<b>State Register</b>
+<br>
+↑
+<br>
+CLOCK
+<br>
+↓
+<br>
+<b>Present State</b>
 
-</script>
+</div>
+
+<p>
+The state register stores the present state. At the active clock
+edge, the next state is loaded into the state register.
+</p>
+
+</section>
+
+
+<!-- Design Procedure -->
+
+<section>
+<h2>11. FSM Design Procedure</h2>
+
+<div class="flow">
+
+<div class="state">Specification</div>
+<div class="arrow">→</div>
+
+<div class="state">State Identification</div>
+<div class="arrow">→</div>
+
+<div class="state">State Diagram</div>
+
+</div>
+
+<div class="flow">
+
+<div class="state">State Table</div>
+<div class="arrow">→</div>
+
+<div class="state">State Assignment</div>
+<div class="arrow">→</div>
+
+<div class="state">Logic Design</div>
+
+</div>
+
+<div class="flow">
+
+<div class="state">Flip-Flop Selection</div>
+<div class="arrow">→</div>
+
+<div class="state">Circuit Implementation</div>
+<div class="arrow">→</div>
+
+<div class="state">Verification</div>
+
+</div>
+
+</section>
+
+
+<!-- FSM ASM Relationship -->
+
+<section>
+<h2>12. FSM and ASM Relationship</h2>
+
+<p>
+FSM and ASM are two ways of representing sequential digital
+systems.
+</p>
+
+<table>
+
+<tr>
+<th>FSM</th>
+<th>ASM</th>
+</tr>
+
+<tr>
+<td>Represents states and transitions</td>
+<td>Represents states, decisions and operations</td>
+</tr>
+
+<tr>
+<td>Usually represented using a state diagram</td>
+<td>Usually represented using an ASM chart</td>
+</tr>
+
+<tr>
+<td>Focuses on state behavior</td>
+<td>Focuses on sequential algorithmic behavior</td>
+</tr>
+
+</table>
+
+<div class="note">
+
+<b>Key idea:</b>
+FSM describes <b>what state the system is in</b> and how it changes,
+while ASM describes <b>the sequence of operations and decisions</b>
+associated with those states.
+
+</div>
+
+</section>
+
+
+<!-- Summary -->
+
+<section>
+<h2>13. Key Points</h2>
+
+<ul>
+
+<li>Sequential circuits have memory.</li>
+
+<li>FSM represents a system using a finite number of states.</li>
+
+<li>State diagrams show transitions between states.</li>
+
+<li>State tables describe present state, input and next state.</li>
+
+<li>Moore output depends on the present state.</li>
+
+<li>Mealy output depends on present state and input.</li>
+
+<li>ASM represents states, operations and decisions.</li>
+
+<li>Synchronous FSMs use a clock for state transitions.</li>
+
+<li>FSM and ASM are useful methods for designing sequential digital systems.</li>
+
+</ul>
+
+</section>
+
+</div>
+
+<footer>
+Core Digital Logic | FSM & ASM | Synchronous Sequential Circuit Design
+</footer>
 
 </body>
 </html>
