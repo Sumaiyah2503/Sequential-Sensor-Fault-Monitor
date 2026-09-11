@@ -3,208 +3,319 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Core Digital Logic - FSM and ASM</title>
+<title>Core Digital Logic | FSM & ASM</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#07111f;
+    color:#eef5ff;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #07111f;
-    color: #eaf2ff;
-    line-height: 1.6;
+header{
+    text-align:center;
+    padding:42px 20px;
+    background:linear-gradient(135deg,#102844,#173f68);
+    border-bottom:1px solid #37658f;
 }
 
-header {
-    text-align: center;
-    padding: 45px 20px;
-    background: #0d1b2a;
-    border-bottom: 2px solid #38bdf8;
+header h1{
+    margin:0;
+    font-size:32px;
+    letter-spacing:1px;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 32px;
-    color: #7dd3fc;
+header p{
+    margin:10px 0 0;
+    color:#b9cce3;
 }
 
-header p {
-    margin-top: 10px;
-    color: #cbd5e1;
+.container{
+    width:92%;
+    max-width:1050px;
+    margin:28px auto;
 }
 
-.container {
-    max-width: 1050px;
-    margin: auto;
-    padding: 25px;
+/* MAIN OPTIONS */
+
+.options{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-bottom:22px;
 }
 
-section {
-    background: #0d1b2a;
-    border: 1px solid #29445f;
-    border-radius: 14px;
-    padding: 25px;
-    margin-bottom: 25px;
+.option{
+    background:#0d1d31;
+    border:1px solid #315477;
+    border-radius:16px;
+    padding:24px 15px;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
 }
 
-h2 {
-    color: #7dd3fc;
-    border-left: 4px solid #38bdf8;
-    padding-left: 12px;
+.option:hover{
+    transform:translateY(-3px);
+    border-color:#69adff;
 }
 
-h3 {
-    color: #bae6fd;
+.option.active{
+    background:#122b47;
+    border-color:#69adff;
 }
 
-p, li {
-    color: #dbeafe;
+.icon{
+    font-size:30px;
 }
 
-ul {
-    padding-left: 25px;
+.option h2{
+    font-size:18px;
+    margin:9px 0 5px;
 }
 
-.definition {
-    background: #102a43;
-    padding: 18px;
-    border-radius: 10px;
-    margin: 15px 0;
+.option p{
+    color:#9eb4cc;
+    font-size:13px;
 }
 
-.flow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 25px 0;
+/* SECTIONS */
+
+.section{
+    display:none;
+    background:#0c1a2d;
+    border:1px solid #29496d;
+    border-radius:16px;
+    padding:27px;
+    margin-bottom:20px;
 }
 
-.state {
-    padding: 16px 25px;
-    min-width: 130px;
-    text-align: center;
-    border: 2px solid #38bdf8;
-    border-radius: 10px;
-    background: #122a40;
-    font-weight: bold;
+.section.active{
+    display:block;
 }
 
-.arrow {
-    font-size: 25px;
-    color: #7dd3fc;
+h2{
+    color:#69adff;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
+h3{
+    color:#c6ddf6;
 }
 
-th, td {
-    border: 1px solid #38556e;
-    padding: 12px;
-    text-align: center;
+p,li{
+    color:#c2d1e2;
+    line-height:1.65;
 }
 
-th {
-    background: #16324f;
-    color: #bae6fd;
+.box{
+    background:#071322;
+    border:1px solid #315477;
+    border-radius:10px;
+    padding:16px;
+    margin:14px 0;
 }
 
-td {
-    background: #0a1a2b;
+.highlight{
+    border-left:4px solid #69adff;
+    background:#102943;
+    padding:15px;
+    border-radius:8px;
 }
 
-.diagram {
-    text-align: center;
-    margin: 25px auto;
+/* FLOW */
+
+.flow{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:22px 0;
 }
 
-.circle {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 125px;
-    height: 75px;
-    border: 3px solid #38bdf8;
-    border-radius: 50%;
-    background: #102a43;
-    font-weight: bold;
-    margin: 10px;
+.state{
+    padding:14px 24px;
+    background:#153554;
+    border:2px solid #62aaff;
+    border-radius:9px;
+    font-weight:bold;
 }
 
-.logic {
-    background: #081827;
-    border: 1px solid #38556e;
-    border-radius: 10px;
-    padding: 22px;
-    text-align: center;
-    margin-top: 20px;
+.arrow{
+    color:#69adff;
+    font-size:22px;
 }
 
-.asm-box {
-    width: 220px;
-    margin: 15px auto;
-    padding: 18px;
-    border: 2px solid #38bdf8;
-    border-radius: 8px;
-    background: #102a43;
-    font-weight: bold;
+/* TABLE */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin:15px 0;
 }
 
-.decision {
-    width: 150px;
-    height: 90px;
-    margin: 30px auto;
-    transform: rotate(45deg);
-    border: 2px solid #7dd3fc;
-    background: #173b50;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+th,td{
+    border:1px solid #315477;
+    padding:10px;
+    text-align:center;
 }
 
-.decision span {
-    transform: rotate(-45deg);
-    font-weight: bold;
+th{
+    background:#183957;
 }
 
-.note {
-    padding: 15px;
-    background: #102a43;
-    border-left: 4px solid #38bdf8;
-    margin-top: 15px;
+td{
+    background:#091829;
 }
 
-footer {
-    text-align: center;
-    padding: 25px;
-    color: #94a3b8;
-    border-top: 1px solid #29445f;
+/* PRACTICE */
+
+.practice{
+    border-color:#3d765f;
 }
 
-@media(max-width:600px) {
+.practice h2{
+    color:#57dc99;
+}
 
-    header h1 {
-        font-size: 25px;
+.practice-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+label{
+    display:block;
+    color:#9fb6ce;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+select,input{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #365b80;
+    background:#071322;
+    color:white;
+    font-size:14px;
+}
+
+button{
+    padding:10px 17px;
+    border:0;
+    border-radius:8px;
+    background:#287be0;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    margin:5px 3px 5px 0;
+}
+
+button:hover{
+    opacity:.85;
+}
+
+.green{
+    background:#21865b;
+}
+
+.gray{
+    background:#40556b;
+}
+
+.red{
+    background:#a83b4c;
+}
+
+.feedback{
+    min-height:25px;
+    margin:15px 0;
+    font-weight:bold;
+}
+
+.correct{color:#4be09a}
+.wrong{color:#ff7272}
+
+.score{
+    color:#ffd166;
+    font-size:18px;
+    margin-top:10px;
+}
+
+/* EDITOR */
+
+.editor{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.item{
+    display:flex;
+    gap:6px;
+    margin:7px 0;
+}
+
+.item input{
+    flex:1;
+}
+
+/* ASM */
+
+.decision{
+    width:150px;
+    height:75px;
+    background:#3b3157;
+    border:2px solid #ae91ff;
+    transform:skew(-15deg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.decision span{
+    transform:skew(15deg);
+}
+
+.branch{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.trueBox{
+    border-left:4px solid #48d995;
+}
+
+.falseBox{
+    border-left:4px solid #ff7474;
+}
+
+/* MOBILE */
+
+@media(max-width:750px){
+
+    .options{
+        grid-template-columns:1fr;
     }
 
-    .container {
-        padding: 15px;
+    .practice-grid,
+    .editor,
+    .branch{
+        grid-template-columns:1fr;
     }
 
-    section {
-        padding: 18px;
+    header h1{
+        font-size:25px;
     }
 
-    .arrow {
-        transform: rotate(90deg);
+    .section{
+        padding:20px;
     }
 }
 </style>
@@ -214,104 +325,145 @@ footer {
 
 <header>
     <h1>CORE DIGITAL LOGIC</h1>
-    <p>Finite State Machine (FSM) and Algorithmic State Machine (ASM)</p>
+    <p>FSM & ASM Interactive Learning and Practice</p>
 </header>
 
 <div class="container">
 
-<!-- Sequential Logic -->
+<!-- ================= MAIN OPTIONS ================= -->
 
-<section>
-<h2>1. Sequential Logic</h2>
+<div class="options">
 
-<p>
-A sequential circuit is a digital circuit whose output depends on
-the present input and the previous state of the circuit.
-</p>
+    <div class="option active" onclick="showSection('core',this)">
+        <div class="icon">⚙️</div>
+        <h2>CORE DIGITAL LOGIC</h2>
+        <p>Sequential logic fundamentals</p>
+    </div>
 
-<div class="logic">
-    <b>Present State + Input → Next State</b>
+    <div class="option" onclick="showSection('fsm',this)">
+        <div class="icon">🔷</div>
+        <h2>FSM</h2>
+        <p>Finite State Machine + Practice</p>
+    </div>
+
+    <div class="option" onclick="showSection('asm',this)">
+        <div class="icon">🔶</div>
+        <h2>ASM</h2>
+        <p>Algorithmic State Machine + Practice</p>
+    </div>
+
 </div>
 
-<h3>Important Elements</h3>
 
-<ul>
-    <li>Input</li>
-    <li>Output</li>
-    <li>State</li>
-    <li>Flip-Flops / Memory Elements</li>
-    <li>Clock</li>
-</ul>
+<!-- ================= CORE DIGITAL LOGIC ================= -->
 
-</section>
+<section id="core" class="section active">
 
+<h2>Core Digital Logic</h2>
 
-<!-- FSM -->
-
-<section>
-<h2>2. Finite State Machine (FSM)</h2>
-
-<div class="definition">
+<div class="highlight">
+<strong>Sequential Logic</strong>
 <p>
-A Finite State Machine is a mathematical model used to represent
-the behavior of a sequential digital system using a finite number
-of states and transitions.
+A sequential circuit produces its output based on the present
+input and the stored previous state.
 </p>
 </div>
 
-<h3>Main Components</h3>
-
-<ul>
-    <li><b>State:</b> Represents the current condition of the system.</li>
-    <li><b>Input:</b> Signal that affects the transition.</li>
-    <li><b>Output:</b> Result produced by the system.</li>
-    <li><b>Transition:</b> Movement from one state to another.</li>
-    <li><b>Clock:</b> Controls state changes in synchronous systems.</li>
-</ul>
-
-</section>
-
-
-<!-- FSM State Diagram -->
-
-<section>
-<h2>3. FSM State Diagram</h2>
-
-<p>
-A state diagram graphically represents the states and transitions
-of a finite state machine.
-</p>
+<h3>Basic Sequential Structure</h3>
 
 <div class="flow">
 
-    <div class="state">STATE A</div>
-
-    <div class="arrow">→</div>
-
-    <div class="state">STATE B</div>
-
-    <div class="arrow">→</div>
-
-    <div class="state">STATE C</div>
+<div class="state">Input</div>
+<div class="arrow">→</div>
+<div class="state">Next-State Logic</div>
+<div class="arrow">→</div>
+<div class="state">State Register</div>
+<div class="arrow">→</div>
+<div class="state">Current State</div>
 
 </div>
 
-<p style="text-align:center;">
-The arrows represent <b>state transitions</b>.
+<h3>Clock</h3>
+
+<p>
+In a synchronous sequential circuit, the state register changes
+according to the clock signal.
 </p>
+
+<h3>Core Concepts</h3>
+
+<ul>
+<li>Combinational logic</li>
+<li>Sequential logic</li>
+<li>State</li>
+<li>State transition</li>
+<li>Clock</li>
+<li>State register</li>
+</ul>
+
+<h3>FSM and ASM</h3>
+
+<div class="box">
+
+<strong>FSM:</strong>
+Represents states and transitions of a sequential system.
+
+<br><br>
+
+<strong>ASM:</strong>
+Represents the algorithmic operation of a sequential system
+using states, decisions and conditional operations.
+
+</div>
 
 </section>
 
 
-<!-- State Table -->
+<!-- ================= FSM ================= -->
 
-<section>
-<h2>4. FSM State Transition Table</h2>
+<section id="fsm" class="section">
+
+<h2>Finite State Machine (FSM)</h2>
+
+<div class="box">
+
+<h3>What is FSM?</h3>
 
 <p>
-The state transition table represents the relationship between
-present state, input and next state.
+A Finite State Machine is a model of a sequential system that
+uses a finite number of states and transitions between states.
+The transition depends on the input and the present state.
 </p>
+
+</div>
+
+<h3>FSM Structure</h3>
+
+<div class="flow">
+
+<div class="state">Present State</div>
+<div class="arrow">→</div>
+<div class="state">Input</div>
+<div class="arrow">→</div>
+<div class="state">Next State</div>
+
+</div>
+
+<h3>Example State Diagram</h3>
+
+<div class="flow">
+
+<div class="state">A</div>
+<div class="arrow">→</div>
+<div class="state">B</div>
+<div class="arrow">→</div>
+<div class="state">C</div>
+<div class="arrow">→</div>
+<div class="state">A</div>
+
+</div>
+
+<h3>State Transition Table</h3>
 
 <table>
 
@@ -323,83 +475,123 @@ present state, input and next state.
 
 <tr>
 <td>A</td>
-<td>0</td>
-<td>A</td>
-</tr>
-
-<tr>
-<td>A</td>
-<td>1</td>
+<td>X</td>
 <td>B</td>
 </tr>
 
 <tr>
 <td>B</td>
-<td>0</td>
+<td>X</td>
+<td>C</td>
+</tr>
+
+<tr>
+<td>C</td>
+<td>X</td>
 <td>A</td>
-</tr>
-
-<tr>
-<td>B</td>
-<td>1</td>
-<td>C</td>
-</tr>
-
-<tr>
-<td>C</td>
-<td>0</td>
-<td>A</td>
-</tr>
-
-<tr>
-<td>C</td>
-<td>1</td>
-<td>C</td>
 </tr>
 
 </table>
 
-</section>
+<h3>Moore vs Mealy</h3>
 
+<div class="editor">
 
-<!-- Moore -->
+<div class="box">
+<strong>Moore Machine</strong>
+<p>
+Output depends only on the present state.
+</p>
+</div>
 
-<section>
-<h2>5. Moore Machine</h2>
+<div class="box">
+<strong>Mealy Machine</strong>
+<p>
+Output depends on the present state and input.
+</p>
+</div>
 
-<div class="definition">
+</div>
+
+<h3>Synchronous FSM</h3>
 
 <p>
-In a Moore machine, the output depends only on the present state.
+In a synchronous FSM, state transitions are controlled by a
+clock signal.
 </p>
 
-<div class="logic">
 
-<b>Present State → Output</b>
+<!-- FSM PRACTICE -->
 
-</div>
+<div class="box practice">
 
-</div>
-
-</section>
-
-
-<!-- Mealy -->
-
-<section>
-<h2>6. Mealy Machine</h2>
-
-<div class="definition">
+<h2>🎯 FSM Practice</h2>
 
 <p>
-In a Mealy machine, the output depends on both the present state
-and the input.
+Create your own FSM states and inputs. A maximum of
+<strong>10 states</strong> can be used.
 </p>
 
-<div class="logic">
+<div class="editor">
 
-<b>Present State + Input → Output</b>
+<div>
 
+<h3>States <small>(2–10)</small></h3>
+
+<div id="fsmStates"></div>
+
+<button onclick="addFSMState()">＋ Add State</button>
+
+</div>
+
+<div>
+
+<h3>Inputs</h3>
+
+<div id="fsmInputs"></div>
+
+<button onclick="addFSMInput()">＋ Add Input</button>
+
+</div>
+
+</div>
+
+<h3>Practice Question</h3>
+
+<div class="practice-grid">
+
+<div>
+<label>Present State</label>
+<select id="fsmPresent"></select>
+</div>
+
+<div>
+<label>Input</label>
+<select id="fsmInputQuestion"></select>
+</div>
+
+<div>
+<label>Your Next State</label>
+<select id="fsmAnswer"></select>
+</div>
+
+</div>
+
+<button class="green" onclick="checkFSM()">
+CHECK ANSWER
+</button>
+
+<button class="gray" onclick="newFSMQuestion()">
+NEXT QUESTION
+</button>
+
+<div id="fsmFeedback" class="feedback"></div>
+
+<div class="score">
+Score:
+<span id="fsmScore">0</span>
+/
+<span id="fsmAttempts">0</span>
 </div>
 
 </div>
@@ -407,221 +599,191 @@ and the input.
 </section>
 
 
-<!-- Comparison -->
+<!-- ================= ASM ================= -->
 
-<section>
-<h2>7. Moore vs Mealy</h2>
+<section id="asm" class="section">
 
-<table>
+<h2>Algorithmic State Machine (ASM)</h2>
 
-<tr>
-<th>Feature</th>
-<th>Moore</th>
-<th>Mealy</th>
-</tr>
+<div class="box">
 
-<tr>
-<td>Output depends on</td>
-<td>Present State</td>
-<td>Present State + Input</td>
-</tr>
-
-<tr>
-<td>Output associated with</td>
-<td>State</td>
-<td>Transition</td>
-</tr>
-
-<tr>
-<td>Response</td>
-<td>State dependent</td>
-<td>Input and state dependent</td>
-</tr>
-
-</table>
-
-</section>
-
-
-<!-- ASM -->
-
-<section>
-<h2>8. Algorithmic State Machine (ASM)</h2>
-
-<div class="definition">
+<h3>What is ASM?</h3>
 
 <p>
-An Algorithmic State Machine is a graphical representation used
-to describe the sequence of operations and decisions in a
-synchronous digital system.
+An Algorithmic State Machine is a flowchart-like representation
+used to describe the operation of a synchronous sequential
+digital system.
 </p>
 
 </div>
 
-<h3>Basic ASM Elements</h3>
+<h3>ASM Elements</h3>
 
-<ul>
+<div class="editor">
 
-<li>
-<b>State Box:</b>
-Represents operations performed during a particular state.
-</li>
-
-<li>
-<b>Decision Box:</b>
-Represents a condition used to determine the next path.
-</li>
-
-<li>
-<b>Conditional Output Box:</b>
-Represents an output generated when a specific condition is true.
-</li>
-
-<li>
-<b>Flow Lines:</b>
-Show the sequence between states and decisions.
-</li>
-
-</ul>
-
-</section>
-
-
-<!-- ASM Chart -->
-
-<section>
-<h2>9. ASM Chart Example</h2>
-
-<div class="diagram">
-
-<div class="asm-box">
-STATE A<br>
-Perform Operation
+<div class="box">
+<strong>State Box</strong>
+<p>
+Represents the operations performed in a state.
+</p>
 </div>
 
-<div style="font-size:25px;">↓</div>
+<div class="box">
+<strong>Decision Box</strong>
+<p>
+Represents a condition that determines the next path.
+</p>
+</div>
+
+</div>
+
+<div class="editor">
+
+<div class="box">
+<strong>Conditional Output</strong>
+<p>
+Represents an operation performed only when a condition is true.
+</p>
+</div>
+
+<div class="box">
+<strong>Transition</strong>
+<p>
+Shows movement from one state to another.
+</p>
+</div>
+
+</div>
+
+
+<h3>ASM Chart</h3>
+
+<div class="flow">
+
+<div class="state">STATE A</div>
+
+<div class="arrow">↓</div>
 
 <div class="decision">
-<span>Input = 1?</span>
+<span>Condition?</span>
 </div>
+
+</div>
+
+<div class="branch">
+
+<div class="box trueBox">
+<strong>TRUE</strong>
+<br><br>
+Next State → B
+</div>
+
+<div class="box falseBox">
+<strong>FALSE</strong>
+<br><br>
+Next State → C
+</div>
+
+</div>
+
+
+<h3>ASM Flow</h3>
 
 <div class="flow">
 
-<div class="state">
-YES → STATE B
-</div>
-
-<div class="state">
-NO → STATE A
-</div>
-
-</div>
+<div class="state">State</div>
+<div class="arrow">→</div>
+<div class="state">Decision</div>
+<div class="arrow">→</div>
+<div class="state">Branch</div>
+<div class="arrow">→</div>
+<div class="state">Next State</div>
 
 </div>
 
-<div class="note">
 
-The ASM chart shows both the <b>state operation</b> and the
-<b>decision condition</b> that controls the next state.
+<!-- ASM PRACTICE -->
 
-</div>
+<div class="box practice">
 
-</section>
-
-
-<!-- Synchronous -->
-
-<section>
-<h2>10. Synchronous FSM</h2>
+<h2>🎯 ASM Practice</h2>
 
 <p>
-In a synchronous FSM, state transitions take place according to
-a clock signal.
+Create your own ASM states and conditions. A maximum of
+<strong>10 states</strong> can be used.
 </p>
 
-<div class="logic">
+<div class="editor">
 
-INPUT
-<br>
-↓
-<br>
-<b>Next-State Logic</b>
-<br>
-↓
-<br>
-<b>State Register</b>
-<br>
-↑
-<br>
-CLOCK
-<br>
-↓
-<br>
-<b>Present State</b>
+<div>
+
+<h3>States <small>(2–10)</small></h3>
+
+<div id="asmStates"></div>
+
+<button onclick="addASMState()">＋ Add State</button>
 
 </div>
 
-<p>
-The state register stores the present state. At the active clock
-edge, the next state is loaded into the state register.
-</p>
+<div>
 
-</section>
+<h3>Conditions</h3>
 
+<div id="asmConditions"></div>
 
-<!-- Design Procedure -->
-
-<section>
-<h2>11. FSM Design Procedure</h2>
-
-<div class="flow">
-
-<div class="state">Specification</div>
-<div class="arrow">→</div>
-
-<div class="state">State Identification</div>
-<div class="arrow">→</div>
-
-<div class="state">State Diagram</div>
+<button onclick="addASMCondition()">＋ Add Condition</button>
 
 </div>
 
-<div class="flow">
+</div>
 
-<div class="state">State Table</div>
-<div class="arrow">→</div>
+<h3>Practice Question</h3>
 
-<div class="state">State Assignment</div>
-<div class="arrow">→</div>
+<div class="practice-grid">
 
-<div class="state">Logic Design</div>
+<div>
+<label>Present State</label>
+<select id="asmPresent"></select>
+</div>
+
+<div>
+<label>Condition</label>
+<select id="asmConditionQuestion"></select>
+</div>
+
+<div>
+<label>TRUE → Next State</label>
+<select id="asmTrueAnswer"></select>
+</div>
+
+<div>
+<label>FALSE → Next State</label>
+<select id="asmFalseAnswer"></select>
+</div>
 
 </div>
 
-<div class="flow">
+<button class="green" onclick="checkASM()">
+CHECK ANSWER
+</button>
 
-<div class="state">Flip-Flop Selection</div>
-<div class="arrow">→</div>
+<button class="gray" onclick="newASMQuestion()">
+NEXT QUESTION
+</button>
 
-<div class="state">Circuit Implementation</div>
-<div class="arrow">→</div>
+<div id="asmFeedback" class="feedback"></div>
 
-<div class="state">Verification</div>
+<div class="score">
+Score:
+<span id="asmScore">0</span>
+/
+<span id="asmAttempts">0</span>
+</div>
 
 </div>
 
-</section>
 
-
-<!-- FSM ASM Relationship -->
-
-<section>
-<h2>12. FSM and ASM Relationship</h2>
-
-<p>
-FSM and ASM are two ways of representing sequential digital
-systems.
-</p>
+<h3>FSM and ASM Difference</h3>
 
 <table>
 
@@ -631,68 +793,522 @@ systems.
 </tr>
 
 <tr>
-<td>Represents states and transitions</td>
-<td>Represents states, decisions and operations</td>
+<td>Shows states and transitions</td>
+<td>Shows algorithmic operation</td>
 </tr>
 
 <tr>
-<td>Usually represented using a state diagram</td>
-<td>Usually represented using an ASM chart</td>
+<td>State diagram is commonly used</td>
+<td>ASM chart is commonly used</td>
 </tr>
 
 <tr>
-<td>Focuses on state behavior</td>
-<td>Focuses on sequential algorithmic behavior</td>
+<td>Focuses on state behaviour</td>
+<td>Shows states, decisions and operations</td>
 </tr>
 
 </table>
 
-<div class="note">
-
-<b>Key idea:</b>
-FSM describes <b>what state the system is in</b> and how it changes,
-while ASM describes <b>the sequence of operations and decisions</b>
-associated with those states.
-
-</div>
-
-</section>
-
-
-<!-- Summary -->
-
-<section>
-<h2>13. Key Points</h2>
-
-<ul>
-
-<li>Sequential circuits have memory.</li>
-
-<li>FSM represents a system using a finite number of states.</li>
-
-<li>State diagrams show transitions between states.</li>
-
-<li>State tables describe present state, input and next state.</li>
-
-<li>Moore output depends on the present state.</li>
-
-<li>Mealy output depends on present state and input.</li>
-
-<li>ASM represents states, operations and decisions.</li>
-
-<li>Synchronous FSMs use a clock for state transitions.</li>
-
-<li>FSM and ASM are useful methods for designing sequential digital systems.</li>
-
-</ul>
-
 </section>
 
 </div>
 
-<footer>
-Core Digital Logic | FSM & ASM | Synchronous Sequential Circuit Design
-</footer>
 
-</body>
-</html>
+<script>
+
+/* =========================
+   SECTION SWITCHING
+========================= */
+
+function showSection(id,element){
+
+    document.querySelectorAll(".section")
+    .forEach(s=>s.classList.remove("active"));
+
+    document.querySelectorAll(".option")
+    .forEach(o=>o.classList.remove("active"));
+
+    document.getElementById(id)
+    .classList.add("active");
+
+    element.classList.add("active");
+}
+
+
+/* =========================
+   FSM DATA
+========================= */
+
+let fsmStates=[
+    {id:1,name:"State A"},
+    {id:2,name:"State B"},
+    {id:3,name:"State C"}
+];
+
+let fsmInputs=[
+    {id:1,name:"Input X"},
+    {id:2,name:"Input Y"}
+];
+
+
+/*
+   Example FSM rules
+*/
+
+let fsmRules=[
+    {state:1,input:1,next:2},
+    {state:2,input:1,next:3},
+    {state:3,input:1,next:1},
+
+    {state:1,input:2,next:1},
+    {state:2,input:2,next:2},
+    {state:3,input:2,next:3}
+];
+
+let fsmScore=0;
+let fsmAttempts=0;
+let currentFSMRule=null;
+
+
+/* ADD FSM STATE */
+
+function addFSMState(){
+
+    if(fsmStates.length>=10){
+
+        alert("Maximum 10 states allowed.");
+
+        return;
+    }
+
+    let id=Date.now()+Math.random();
+
+    fsmStates.push({
+        id:id,
+        name:"State "+String.fromCharCode(65+fsmStates.length)
+    });
+
+    renderFSM();
+}
+
+
+/* ADD FSM INPUT */
+
+function addFSMInput(){
+
+    let id=Date.now()+Math.random();
+
+    fsmInputs.push({
+        id:id,
+        name:"Input "+(fsmInputs.length+1)
+    });
+
+    renderFSM();
+}
+
+
+/* RENDER FSM */
+
+function renderFSM(){
+
+    let statesBox=
+        document.getElementById("fsmStates");
+
+    let inputsBox=
+        document.getElementById("fsmInputs");
+
+    statesBox.innerHTML="";
+    inputsBox.innerHTML="";
+
+
+    fsmStates.forEach((state,index)=>{
+
+        statesBox.innerHTML+=`
+
+        <div class="item">
+
+        <input
+        value="${state.name}"
+        onchange="fsmStates[${index}].name=this.value">
+
+        </div>
+
+        `;
+
+    });
+
+
+    fsmInputs.forEach((input,index)=>{
+
+        inputsBox.innerHTML+=`
+
+        <div class="item">
+
+        <input
+        value="${input.name}"
+        onchange="fsmInputs[${index}].name=this.value">
+
+        </div>
+
+        `;
+
+    });
+
+
+    document.getElementById("fsmPresent").innerHTML=
+        fsmStates.map(s=>
+        `<option value="${s.id}">
+        ${s.name}
+        </option>`
+        ).join("");
+
+
+    document.getElementById("fsmInputQuestion").innerHTML=
+        fsmInputs.map(i=>
+        `<option value="${i.id}">
+        ${i.name}
+        </option>`
+        ).join("");
+
+
+    document.getElementById("fsmAnswer").innerHTML=
+
+        `<option value="">
+        Select Next State
+        </option>`
+
+        +
+
+        fsmStates.map(s=>
+        `<option value="${s.id}">
+        ${s.name}
+        </option>`
+        ).join("");
+}
+
+
+/* NEW FSM QUESTION */
+
+function newFSMQuestion(){
+
+    if(fsmRules.length===0){
+
+        alert("No FSM practice rules available.");
+
+        return;
+    }
+
+    currentFSMRule=
+        fsmRules[
+            Math.floor(
+                Math.random()*fsmRules.length
+            )
+        ];
+
+
+    document.getElementById("fsmPresent").value=
+        currentFSMRule.state;
+
+    document.getElementById("fsmInputQuestion").value=
+        currentFSMRule.input;
+
+    document.getElementById("fsmAnswer").value="";
+
+    document.getElementById("fsmFeedback").textContent="";
+}
+
+
+/* CHECK FSM */
+
+function checkFSM(){
+
+    if(!currentFSMRule){
+
+        newFSMQuestion();
+
+        return;
+    }
+
+
+    let answer=
+        document.getElementById("fsmAnswer").value;
+
+
+    if(!answer){
+
+        document.getElementById("fsmFeedback").className=
+            "feedback wrong";
+
+        document.getElementById("fsmFeedback").textContent=
+            "Please select a next state.";
+
+        return;
+    }
+
+
+    fsmAttempts++;
+
+
+    if(Number(answer)===currentFSMRule.next){
+
+        fsmScore++;
+
+        document.getElementById("fsmFeedback").className=
+            "feedback correct";
+
+        document.getElementById("fsmFeedback").textContent=
+            "✓ Correct!";
+
+    }else{
+
+        document.getElementById("fsmFeedback").className=
+            "feedback wrong";
+
+        document.getElementById("fsmFeedback").textContent=
+            "✗ Incorrect. Try the next question.";
+
+    }
+
+
+    document.getElementById("fsmScore").textContent=
+        fsmScore;
+
+    document.getElementById("fsmAttempts").textContent=
+        fsmAttempts;
+}
+
+
+/* =========================
+   ASM DATA
+========================= */
+
+let asmStates=[
+    {id:1,name:"State A"},
+    {id:2,name:"State B"},
+    {id:3,name:"State C"}
+];
+
+let asmConditions=[
+    {id:1,name:"Condition X"},
+    {id:2,name:"Condition Y"}
+];
+
+
+/*
+   Example ASM rules
+*/
+
+let asmRules=[
+    {
+        state:1,
+        condition:1,
+        trueNext:2,
+        falseNext:3
+    },
+
+    {
+        state:2,
+        condition:2,
+        trueNext:3,
+        falseNext:1
+    },
+
+    {
+        state:3,
+        condition:1,
+        trueNext:1,
+        falseNext:2
+    }
+];
+
+
+let asmScore=0;
+let asmAttempts=0;
+let currentASMRule=null;
+
+
+/* ADD ASM STATE */
+
+function addASMState(){
+
+    if(asmStates.length>=10){
+
+        alert("Maximum 10 states allowed.");
+
+        return;
+    }
+
+    let id=Date.now()+Math.random();
+
+    asmStates.push({
+        id:id,
+        name:"State "+String.fromCharCode(65+asmStates.length)
+    });
+
+    renderASM();
+}
+
+
+/* ADD ASM CONDITION */
+
+function addASMCondition(){
+
+    let id=Date.now()+Math.random();
+
+    asmConditions.push({
+        id:id,
+        name:"Condition "+(asmConditions.length+1)
+    });
+
+    renderASM();
+}
+
+
+/* RENDER ASM */
+
+function renderASM(){
+
+    let statesBox=
+        document.getElementById("asmStates");
+
+    let conditionsBox=
+        document.getElementById("asmConditions");
+
+    statesBox.innerHTML="";
+    conditionsBox.innerHTML="";
+
+
+    asmStates.forEach((state,index)=>{
+
+        statesBox.innerHTML+=`
+
+        <div class="item">
+
+        <input
+        value="${state.name}"
+        onchange="asmStates[${index}].name=this.value">
+
+        </div>
+
+        `;
+
+    });
+
+
+    asmConditions.forEach((condition,index)=>{
+
+        conditionsBox.innerHTML+=`
+
+        <div class="item">
+
+        <input
+        value="${condition.name}"
+        onchange="asmConditions[${index}].name=this.value">
+
+        </div>
+
+        `;
+
+    });
+
+
+    document.getElementById("asmPresent").innerHTML=
+
+        asmStates.map(s=>
+        `<option value="${s.id}">
+        ${s.name}
+        </option>`
+        ).join("");
+
+
+    document.getElementById("asmConditionQuestion").innerHTML=
+
+        asmConditions.map(c=>
+        `<option value="${c.id}">
+        ${c.name}
+        </option>`
+        ).join("");
+
+
+    let options=
+
+        `<option value="">
+        Select State
+        </option>`
+
+        +
+
+        asmStates.map(s=>
+        `<option value="${s.id}">
+        ${s.name}
+        </option>`
+        ).join("");
+
+
+    document.getElementById("asmTrueAnswer").innerHTML=
+        options;
+
+    document.getElementById("asmFalseAnswer").innerHTML=
+        options;
+}
+
+
+/* NEW ASM QUESTION */
+
+function newASMQuestion(){
+
+    if(asmRules.length===0){
+
+        alert("No ASM practice rules available.");
+
+        return;
+    }
+
+
+    currentASMRule=
+        asmRules[
+            Math.floor(
+                Math.random()*asmRules.length
+            )
+        ];
+
+
+    document.getElementById("asmPresent").value=
+        currentASMRule.state;
+
+    document.getElementById("asmConditionQuestion").value=
+        currentASMRule.condition;
+
+    document.getElementById("asmTrueAnswer").value="";
+    document.getElementById("asmFalseAnswer").value="";
+
+    document.getElementById("asmFeedback").textContent="";
+}
+
+
+/* CHECK ASM */
+
+function checkASM(){
+
+    if(!currentASMRule){
+
+        newASMQuestion();
+
+        return;
+    }
+
+
+    let trueAnswer=
+        document.getElementById("asmTrueAnswer").value;
+
+    let falseAnswer=
+        document.getElementById("asmFalseAnswer").value;
+
+
+    if(!trueAnswer || !falseAnswer){
+
+        document.getElementById("asmFeedback").className=
+            "feedback wrong";
+
+        document.getElementById("asmFeedback").textContent=
+            "Please select both TRUE and FALSE next states.";
