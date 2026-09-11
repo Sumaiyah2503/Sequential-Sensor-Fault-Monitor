@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Synchronous Sequential Circuit</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #ffffff;
+    overflow-x: hidden;
+
+    background:
+        radial-gradient(circle at 15% 20%,
+            rgba(0, 190, 255, 0.18),
+            transparent 28%),
+        radial-gradient(circle at 85% 75%,
+            rgba(0, 255, 200, 0.12),
+            transparent 30%),
+        linear-gradient(
+            135deg,
+            #020811 0%,
+            #061522 45%,
+            #020b14 100%
+        );
+
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(80, 200, 255, 0.07) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            rgba(80, 200, 255, 0.07) 1px,
+            transparent 1px
+        );
+
+    background-size: 45px 45px;
+
+    mask-image:
+        radial-gradient(
+            circle at center,
+            black 20%,
+            transparent 85%
+        );
+
+    pointer-events: none;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent 10%,
+            rgba(0, 220, 255, 0.12) 10.2%,
+            transparent 10.4%
+        ),
+        linear-gradient(
+            0deg,
+            transparent 72%,
+            rgba(0, 220, 255, 0.10) 72.2%,
+            transparent 72.4%
+        );
+
+    background-size: 180px 180px;
+
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.container {
+    width: 92%;
+    max-width: 1100px;
+    margin: auto;
+    padding: 35px 0 40px;
+
+    position: relative;
+    z-index: 2;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header .main-title {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 0 12px rgba(0, 220, 255, 0.6),
+        0 0 30px rgba(0, 220, 255, 0.25);
+}
+
+.header .subtitle {
+    margin-top: 10px;
+    font-size: clamp(17px, 3vw, 23px);
+    color: #79dff5;
+    letter-spacing: 1px;
+}
+
+.header .project-name {
+    margin-top: 8px;
+    font-size: 15px;
+    color: #a7c5d0;
+}
+
+.dashboard {
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10, 30, 45, 0.92),
+            rgba(3, 15, 25, 0.94)
+        );
+
+    border: 1px solid rgba(80, 220, 255, 0.25);
+    border-radius: 25px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.55),
+        inset 0 0 40px rgba(0, 180, 255, 0.04);
+
+    backdrop-filter: blur(15px);
+}
+
+.section-title {
+    color: #7ce7ff;
+    font-size: 19px;
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+}
+
+.inputs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.sensor {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20, 55, 70, 0.72),
+            rgba(5, 20, 30, 0.8)
+        );
+
+    border: 1px solid rgba(100, 220, 255, 0.16);
+
+    border-radius: 18px;
+    padding: 20px;
+
+    box-shadow:
+        inset 0 0 20px rgba(0, 220, 255, 0.04),
+        0 10px 25px rgba(0, 0, 0, 0.25);
+
+    transition: 0.25s;
+}
+
+.sensor:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(100, 230, 255, 0.4);
+
+    box-shadow:
+        0 10px 30px rgba(0, 200, 255, 0.12);
+}
+
+.sensor label {
+    display: block;
+    color: #b9dce6;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.sensor input {
+    width: 100%;
+
+    padding: 13px;
+
+    border-radius: 10px;
+    border: 1px solid rgba(100, 220, 255, 0.2);
+
+    background: rgba(0, 8, 15, 0.75);
+
+    color: white;
+
+    font-size: 16px;
+    outline: none;
+}
+
+.sensor input:focus {
+    border-color: #4ddfff;
+
+    box-shadow:
+        0 0 12px rgba(0, 220, 255, 0.18);
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+button {
+    flex: 1;
+
+    padding: 15px;
+
+    border: none;
+    border-radius: 12px;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.clock {
+    background:
+        linear-gradient(
+            135deg,
+            #0799c5,
+            #05c8d9
+        );
+
+    color: white;
+
+    box-shadow:
+        0 0 20px rgba(0, 210, 255, 0.2);
+}
+
+.clock:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 28px rgba(0, 220, 255, 0.35);
+}
+
+.reset {
+    background:
+        linear-gradient(
+            135deg,
+            #263c4b,
+            #172833
+        );
+
+    color: #d5e9ef;
+}
+
+.reset:hover {
+    transform: translateY(-2px);
+}
+
+.result {
+    margin-top: 25px;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+.card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(8, 27, 38, 0.85),
+            rgba(3, 15, 23, 0.9)
+        );
+
+    border: 1px solid rgba(100, 210, 240, 0.13);
+
+    border-radius: 15px;
+
+    padding: 18px;
+}
+
+.card span {
+    display: block;
+
+    color: #83aebb;
+
+    font-size: 12px;
+
+    margin-bottom: 8px;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.card strong {
+    font-size: 20px;
+
+    color: #f2fbff;
+}
+
+.transition {
+    grid-column: span 2;
+
+    text-align: center;
+
+    padding: 23px;
+
+    border-color:
+        rgba(0, 220, 255, 0.25);
+}
+
+.transition strong {
+    font-size: clamp(20px, 4vw, 28px);
+
+    color: #73e6ff;
+
+    text-shadow:
+        0 0 12px rgba(0, 220, 255, 0.25);
+}
+
+/* =========================
+   FSM PANEL
+========================= */
+
+.fsm {
+    margin-top: 28px;
+
+    padding: 22px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7, 32, 43, 0.78),
+            rgba(2, 15, 24, 0.9)
+        );
+
+    border: 1px solid rgba(80, 220, 255, 0.18);
+
+    text-align: center;
+}
+
+.fsm-description {
+    color: #8eabb5;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+/* FSM diagram */
+
+.fsm-diagram {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    margin-top: 20px;
+}
+
+.state-box {
+    min-width: 120px;
+
+    padding: 15px 12px;
+
+    border-radius: 14px;
+
+    border: 2px solid rgba(100, 220, 255, 0.35);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20, 55, 70, 0.9),
+            rgba(4, 20, 30, 0.95)
+        );
+
+    box-shadow:
+        0 0 18px rgba(0, 200, 255, 0.08);
+}
+
+.state-box strong {
+    display: block;
+    color: #e9fbff;
+    font-size: 16px;
+}
+
+.state-box small {
+    display: block;
+    margin-top: 5px;
+    color: #8eabb5;
+    font-size: 11px;
+}
+
+.arrow {
+    font-size: 25px;
+    color: #71e5ff;
+    font-weight: bold;
+}
+
+.fsm-note {
+    margin-top: 18px;
+
+    color: #a9d8e3;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+/* =========================
+   ASM PANEL
+========================= */
+
+.asm {
+    margin-top: 28px;
+
+    padding: 22px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7, 32, 43, 0.78),
+            rgba(2, 15, 24, 0.9)
+        );
+
+    border: 1px solid rgba(80, 220, 255, 0.18);
+
+    text-align: center;
+}
+
+.asm-flow {
+    margin-top: 15px;
+
+    font-size: clamp(14px, 2.5vw, 18px);
+
+    color: #b8effa;
+
+    letter-spacing: 0.5px;
+
+    line-height: 1.8;
+}
+
+.asm-description {
+    margin-top: 12px;
+
+    color: #8eabb5;
+
+    font-size: 13px;
+}
+
+/* =========================
+   LOGIC INFORMATION
+========================= */
+
+.logic-panel {
+    margin-top: 28px;
+
+    padding: 22px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7, 32, 43, 0.78),
+            rgba(2, 15, 24, 0.9)
+        );
+
+    border: 1px solid rgba(80, 220, 255, 0.18);
+}
+
+.logic-list {
+    margin-top: 12px;
+    padding-left: 20px;
+
+    color: #b8dce5;
+
+    line-height: 1.8;
+}
+
+.logic-list li {
+    margin-bottom: 5px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    text-align: center;
+
+    margin-top: 20px;
+
+    color: #6d8e99;
+
+    font-size: 12px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 750px) {
+
+    .inputs {
+        grid-template-columns: 1fr;
+    }
+
+    .result {
+        grid-template-columns: 1fr;
+    }
+
+    .transition {
+        grid-column: span 1;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .dashboard {
+        padding: 20px;
+    }
+
+    .fsm-diagram {
+        flex-direction: column;
+    }
+
+    .arrow {
+        transform: rotate(90deg);
+    }
+
+    .state-box {
+        width: 85%;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="main-title">
+            SYNCHRONOUS SEQUENTIAL CIRCUIT
+        </div>
+
+        <div class="subtitle">
+            Sequential Sensor Fault Monitor
+        </div>
+
+        <div class="project-name">
+            FSM + ASM Based Sequential Fault Detection System
+        </div>
+
+    </div>
+
+
+    <!-- MAIN DASHBOARD -->
+
+    <div class="dashboard">
+
+        <h2 class="section-title">
+            Sensor Input Monitoring
+        </h2>
+
+
+        <!-- SENSOR INPUTS -->
+
+        <div class="inputs">
+
+            <div class="sensor">
+
+                <label>
+                    🌡️ Temperature (°C)
+                </label>
+
+                <input
+                    id="temperature"
+                    type="number"
+                    value="30"
+                >
+
+            </div>
+
+
+            <div class="sensor">
+
+                <label>
+                    💨 Pressure (kPa)
+                </label>
+
+                <input
+                    id="pressure"
+                    type="number"
+                    value="100"
+                >
+
+            </div>
+
+
+            <div class="sensor">
+
+                <label>
+                    📳 Vibration (mm/s)
+                </label>
+
+                <input
+                    id="vibration"
+                    type="number"
+                    value="2"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTROL BUTTONS -->
+
+        <div class="buttons">
+
+            <button
+                class="clock"
+                onclick="clockPulse()"
+            >
+                ⚡ CLOCK PULSE
+            </button>
+
+            <button
+                class="reset"
+                onclick="resetSystem()"
+            >
+                ↻ RESET
+            </button>
+
+        </div>
+
+
+        <!-- RESULTS -->
+
+        <div class="result">
+
+            <div class="card">
+
+                <span>
+                    Sensor Condition
+                </span>
+
+                <strong id="condition">
+                    NORMAL
+                </strong>
+
+            </div>
+
+
+            <div class="card">
+
+                <span>
+                    Previous State
+                </span>
+
+                <strong id="previous">
+                    NORMAL
+                </strong>
+
+            </div>
+
+
+            <div class="card">
+
+                <span>
+                    Current State
+                </span>
+
+                <strong id="current">
+                    NORMAL
+                </strong>
+
+            </div>
+
+
+            <div class="card">
+
+                <span>
+                    Clock Status
+                </span>
+
+                <strong id="clock">
+                    Waiting
+                </strong>
+
+            </div>
+
+
+            <div class="card transition">
+
+                <span>
+                    State Transition
+                </span>
+
+                <strong id="transition">
+                    NORMAL → NORMAL
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- FSM FLOW -->
+
+        <div class="fsm">
+
+            <h2 class="section-title">
+                FSM State Diagram
+            </h2>
+
+            <div class="fsm-description">
+                FSM defines the system states and the transitions between them.
+            </div>
+
+            <div class="fsm-diagram">
+
+                <div class="state-box">
+                    <strong>NORMAL</strong>
+                    <small>Initial State</small>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="state-box">
+                    <strong>WARNING</strong>
+                    <small>First Abnormal</small>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="state-box">
+                    <strong>FAULT</strong>
+                    <small>Continued Abnormal</small>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="state-box">
+                    <strong>RECOVERY</strong>
+                    <small>Normal After Fault</small>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="state-box">
+                    <strong>NORMAL</strong>
+                    <small>Restored State</small>
+                </div>
+
+            </div>
+
+            <div class="fsm-note">
+                Transitions are evaluated according to the sensor condition
+                and occur synchronously when a clock pulse is applied.
+            </div>
+
+        </div>
+
+
+        <!-- ASM FLOW -->
+
+        <div class="asm">
+
+            <h2 class="section-title">
+                ASM State Flow
+            </h2>
+
+            <div class="asm-flow">
+                NORMAL → WARNING → FAULT → RECOVERY → NORMAL
+            </div>
+
+            <div class="asm-description">
+                ASM represents the sequential decision-making flow of the system.
+            </div>
+
+        </div>
+
+
+        <!-- CORE LOGIC -->
+
+        <div class="logic-panel">
+
+            <h2 class="section-title">
+                Core Digital Logic
+            </h2>
+
+            <ul class="logic-list">
+
+                <li>
+                    Sensor values are compared with predefined threshold values.
+                </li>
+
+                <li>
+                    The sensor condition is classified as NORMAL or ABNORMAL.
+                </li>
+
+                <li>
+                    FSM determines the current state and next-state transition.
+                </li>
+
+                <li>
+                    ASM represents the sequential decision-making process.
+                </li>
+
+                <li>
+                    State changes occur only when a clock pulse is applied.
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        Sequential Sensor Fault Monitor • FSM + ASM Based Synchronous Sequential Circuit
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   INITIAL STATE
+========================= */
+
+let currentState = "NORMAL";
+
+
+/* =========================
+   SENSOR CONDITION
+========================= */
+
+function getCondition() {
+
+    const temperature =
+        Number(
+            document.getElementById("temperature").value
+        );
+
+    const pressure =
+        Number(
+            document.getElementById("pressure").value
+        );
+
+    const vibration =
+        Number(
+            document.getElementById("vibration").value
+        );
+
+
+    if (
+        temperature > 50 ||
+        pressure < 90 ||
+        pressure > 110 ||
+        vibration > 5
+    ) {
+
+        return "ABNORMAL";
+
+    }
+
+    return "NORMAL";
+}
+
+
+/* =========================
+   SYNCHRONOUS FSM + ASM
+========================= */
+
+function clockPulse() {
+
+    const condition = getCondition();
+
+    const previousState = currentState;
+
+
+    /*
+       FSM + ASM STATE TRANSITIONS
+
+       NORMAL + NORMAL
+       → NORMAL
+
+       NORMAL + ABNORMAL
+       → WARNING
+
+       WARNING + NORMAL
+       → NORMAL
+
+       WARNING + ABNORMAL
+       → FAULT
+
+       FAULT + NORMAL
+       → RECOVERY
+
+       FAULT + ABNORMAL
+       → FAULT
+
+       RECOVERY + NORMAL
+       → NORMAL
+
+       RECOVERY + ABNORMAL
+       → FAULT
+    */
+
+
+    if (currentState === "NORMAL") {
+
+        if (condition === "ABNORMAL") {
+
+            currentState = "WARNING";
+
+        }
+
+        else {
+
+            currentState = "NORMAL";
+
+        }
+
+    }
+
+
+    else if (currentState === "WARNING") {
+
+        if (condition === "ABNORMAL") {
+
+            currentState = "FAULT";
+
+        }
+
+        else {
+
+            currentState = "NORMAL";
+
+        }
+
+    }
+
+
+    else if (currentState === "FAULT") {
+
+        if (condition === "NORMAL") {
+
+            currentState = "RECOVERY";
+
+        }
+
+        else {
+
+            currentState = "FAULT";
+
+        }
+
+    }
+
+
+    else if (currentState === "RECOVERY") {
+
+        if (condition === "NORMAL") {
+
+            currentState = "NORMAL";
+
+        }
+
+        else {
+
+            currentState = "FAULT";
+
+        }
+
+    }
+
+
+    /* UPDATE DISPLAY */
+
+    document.getElementById("condition")
+        .textContent = condition;
+
+    document.getElementById("previous")
+        .textContent = previousState;
+
+    document.getElementById("current")
+        .textContent = currentState;
+
+    document.getElementById("clock")
+        .textContent = "Applied";
+
+    document.getElementById("transition")
+        .textContent =
+        previousState + " → " + currentState;
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetSystem() {
+
+    currentState = "NORMAL";
+
+    document.getElementById("condition")
+        .textContent = "NORMAL";
+
+    document.getElementById("previous")
+        .textContent = "NORMAL";
+
+    document.getElementById("current")
+        .textContent = "NORMAL";
+
+    document.getElementById("clock")
+        .textContent = "Waiting";
+
+    document.getElementById("transition")
+        .textContent =
+        "NORMAL → NORMAL";
+}
+
+</script>
+
+</body>
+</html>
