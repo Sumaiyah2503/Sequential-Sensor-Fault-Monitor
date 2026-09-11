@@ -39,8 +39,6 @@ header p{
     margin:28px auto;
 }
 
-/* MAIN OPTIONS */
-
 .options{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -81,8 +79,6 @@ header p{
     color:#9eb4cc;
     font-size:13px;
 }
-
-/* SECTIONS */
 
 .section{
     display:none;
@@ -125,8 +121,6 @@ p,li{
     border-radius:8px;
 }
 
-/* FLOW */
-
 .flow{
     display:flex;
     justify-content:center;
@@ -149,8 +143,6 @@ p,li{
     font-size:22px;
 }
 
-/* TABLE */
-
 table{
     width:100%;
     border-collapse:collapse;
@@ -170,8 +162,6 @@ th{
 td{
     background:#091829;
 }
-
-/* PRACTICE */
 
 .practice{
     border-color:#3d765f;
@@ -227,10 +217,6 @@ button:hover{
     background:#40556b;
 }
 
-.red{
-    background:#a83b4c;
-}
-
 .feedback{
     min-height:25px;
     margin:15px 0;
@@ -246,8 +232,6 @@ button:hover{
     margin-top:10px;
 }
 
-/* EDITOR */
-
 .editor{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -255,16 +239,8 @@ button:hover{
 }
 
 .item{
-    display:flex;
-    gap:6px;
     margin:7px 0;
 }
-
-.item input{
-    flex:1;
-}
-
-/* ASM */
 
 .decision{
     width:150px;
@@ -295,8 +271,6 @@ button:hover{
 .falseBox{
     border-left:4px solid #ff7474;
 }
-
-/* MOBILE */
 
 @media(max-width:750px){
 
@@ -330,7 +304,7 @@ button:hover{
 
 <div class="container">
 
-<!-- ================= MAIN OPTIONS ================= -->
+<!-- MAIN OPTIONS -->
 
 <div class="options">
 
@@ -354,8 +328,7 @@ button:hover{
 
 </div>
 
-
-<!-- ================= CORE DIGITAL LOGIC ================= -->
+<!-- CORE DIGITAL LOGIC -->
 
 <section id="core" class="section active">
 
@@ -372,7 +345,6 @@ input and the stored previous state.
 <h3>Basic Sequential Structure</h3>
 
 <div class="flow">
-
 <div class="state">Input</div>
 <div class="arrow">→</div>
 <div class="state">Next-State Logic</div>
@@ -380,7 +352,6 @@ input and the stored previous state.
 <div class="state">State Register</div>
 <div class="arrow">→</div>
 <div class="state">Current State</div>
-
 </div>
 
 <h3>Clock</h3>
@@ -406,20 +377,19 @@ according to the clock signal.
 <div class="box">
 
 <strong>FSM:</strong>
-Represents states and transitions of a sequential system.
-
-<br><br>
+<p>Represents states and transitions of a sequential system.</p>
 
 <strong>ASM:</strong>
+<p>
 Represents the algorithmic operation of a sequential system
 using states, decisions and conditional operations.
+</p>
 
 </div>
 
 </section>
 
-
-<!-- ================= FSM ================= -->
+<!-- FSM -->
 
 <section id="fsm" class="section">
 
@@ -440,19 +410,16 @@ The transition depends on the input and the present state.
 <h3>FSM Structure</h3>
 
 <div class="flow">
-
 <div class="state">Present State</div>
 <div class="arrow">→</div>
 <div class="state">Input</div>
 <div class="arrow">→</div>
 <div class="state">Next State</div>
-
 </div>
 
 <h3>Example State Diagram</h3>
 
 <div class="flow">
-
 <div class="state">A</div>
 <div class="arrow">→</div>
 <div class="state">B</div>
@@ -460,13 +427,11 @@ The transition depends on the input and the present state.
 <div class="state">C</div>
 <div class="arrow">→</div>
 <div class="state">A</div>
-
 </div>
 
 <h3>State Transition Table</h3>
 
 <table>
-
 <tr>
 <th>Present State</th>
 <th>Input</th>
@@ -491,6 +456,23 @@ The transition depends on the input and the present state.
 <td>A</td>
 </tr>
 
+<tr>
+<td>A</td>
+<td>Y</td>
+<td>A</td>
+</tr>
+
+<tr>
+<td>B</td>
+<td>Y</td>
+<td>B</td>
+</tr>
+
+<tr>
+<td>C</td>
+<td>Y</td>
+<td>C</td>
+</tr>
 </table>
 
 <h3>Moore vs Mealy</h3>
@@ -499,16 +481,12 @@ The transition depends on the input and the present state.
 
 <div class="box">
 <strong>Moore Machine</strong>
-<p>
-Output depends only on the present state.
-</p>
+<p>Output depends only on the present state.</p>
 </div>
 
 <div class="box">
 <strong>Mealy Machine</strong>
-<p>
-Output depends on the present state and input.
-</p>
+<p>Output depends on the present state and input.</p>
 </div>
 
 </div>
@@ -520,7 +498,6 @@ In a synchronous FSM, state transitions are controlled by a
 clock signal.
 </p>
 
-
 <!-- FSM PRACTICE -->
 
 <div class="box practice">
@@ -528,62 +505,43 @@ clock signal.
 <h2>🎯 FSM Practice</h2>
 
 <p>
-Create your own FSM states and inputs. A maximum of
-<strong>10 states</strong> can be used.
+Practice identifying the correct next state from a present state
+and input.
 </p>
-
-<div class="editor">
-
-<div>
-
-<h3>States <small>(2–10)</small></h3>
-
-<div id="fsmStates"></div>
-
-<button onclick="addFSMState()">＋ Add State</button>
-
-</div>
-
-<div>
-
-<h3>Inputs</h3>
-
-<div id="fsmInputs"></div>
-
-<button onclick="addFSMInput()">＋ Add Input</button>
-
-</div>
-
-</div>
-
-<h3>Practice Question</h3>
 
 <div class="practice-grid">
 
 <div>
 <label>Present State</label>
-<select id="fsmPresent"></select>
+<select id="fsmPresent">
+<option value="A">State A</option>
+<option value="B">State B</option>
+<option value="C">State C</option>
+</select>
 </div>
 
 <div>
 <label>Input</label>
-<select id="fsmInputQuestion"></select>
+<select id="fsmInputQuestion">
+<option value="X">Input X</option>
+<option value="Y">Input Y</option>
+</select>
 </div>
 
 <div>
 <label>Your Next State</label>
-<select id="fsmAnswer"></select>
+<select id="fsmAnswer">
+<option value="">Select Next State</option>
+<option value="A">State A</option>
+<option value="B">State B</option>
+<option value="C">State C</option>
+</select>
 </div>
 
 </div>
 
-<button class="green" onclick="checkFSM()">
-CHECK ANSWER
-</button>
-
-<button class="gray" onclick="newFSMQuestion()">
-NEXT QUESTION
-</button>
+<button class="green" onclick="checkFSM()">CHECK ANSWER</button>
+<button class="gray" onclick="newFSMQuestion()">NEXT QUESTION</button>
 
 <div id="fsmFeedback" class="feedback"></div>
 
@@ -598,8 +556,7 @@ Score:
 
 </section>
 
-
-<!-- ================= ASM ================= -->
+<!-- ASM -->
 
 <section id="asm" class="section">
 
@@ -623,16 +580,12 @@ digital system.
 
 <div class="box">
 <strong>State Box</strong>
-<p>
-Represents the operations performed in a state.
-</p>
+<p>Represents the operations performed in a state.</p>
 </div>
 
 <div class="box">
 <strong>Decision Box</strong>
-<p>
-Represents a condition that determines the next path.
-</p>
+<p>Represents a condition that determines the next path.</p>
 </div>
 
 </div>
@@ -648,13 +601,10 @@ Represents an operation performed only when a condition is true.
 
 <div class="box">
 <strong>Transition</strong>
-<p>
-Shows movement from one state to another.
-</p>
+<p>Shows movement from one state to another.</p>
 </div>
 
 </div>
-
 
 <h3>ASM Chart</h3>
 
@@ -686,7 +636,6 @@ Next State → C
 
 </div>
 
-
 <h3>ASM Flow</h3>
 
 <div class="flow">
@@ -701,7 +650,6 @@ Next State → C
 
 </div>
 
-
 <!-- ASM PRACTICE -->
 
 <div class="box practice">
@@ -709,67 +657,53 @@ Next State → C
 <h2>🎯 ASM Practice</h2>
 
 <p>
-Create your own ASM states and conditions. A maximum of
-<strong>10 states</strong> can be used.
+Practice identifying TRUE and FALSE paths from a state and
+condition.
 </p>
-
-<div class="editor">
-
-<div>
-
-<h3>States <small>(2–10)</small></h3>
-
-<div id="asmStates"></div>
-
-<button onclick="addASMState()">＋ Add State</button>
-
-</div>
-
-<div>
-
-<h3>Conditions</h3>
-
-<div id="asmConditions"></div>
-
-<button onclick="addASMCondition()">＋ Add Condition</button>
-
-</div>
-
-</div>
-
-<h3>Practice Question</h3>
 
 <div class="practice-grid">
 
 <div>
 <label>Present State</label>
-<select id="asmPresent"></select>
+<select id="asmPresent">
+<option value="A">State A</option>
+<option value="B">State B</option>
+<option value="C">State C</option>
+</select>
 </div>
 
 <div>
 <label>Condition</label>
-<select id="asmConditionQuestion"></select>
+<select id="asmConditionQuestion">
+<option value="X">Condition X</option>
+<option value="Y">Condition Y</option>
+</select>
 </div>
 
 <div>
 <label>TRUE → Next State</label>
-<select id="asmTrueAnswer"></select>
+<select id="asmTrueAnswer">
+<option value="">Select State</option>
+<option value="A">State A</option>
+<option value="B">State B</option>
+<option value="C">State C</option>
+</select>
 </div>
 
 <div>
 <label>FALSE → Next State</label>
-<select id="asmFalseAnswer"></select>
+<select id="asmFalseAnswer">
+<option value="">Select State</option>
+<option value="A">State A</option>
+<option value="B">State B</option>
+<option value="C">State C</option>
+</select>
 </div>
 
 </div>
 
-<button class="green" onclick="checkASM()">
-CHECK ANSWER
-</button>
-
-<button class="gray" onclick="newASMQuestion()">
-NEXT QUESTION
-</button>
+<button class="green" onclick="checkASM()">CHECK ANSWER</button>
+<button class="gray" onclick="newASMQuestion()">NEXT QUESTION</button>
 
 <div id="asmFeedback" class="feedback"></div>
 
@@ -781,7 +715,6 @@ Score:
 </div>
 
 </div>
-
 
 <h3>FSM and ASM Difference</h3>
 
@@ -813,502 +746,292 @@ Score:
 
 </div>
 
-
 <script>
 
 /* =========================
    SECTION SWITCHING
 ========================= */
 
-function showSection(id,element){
+function showSection(id, element){
 
-    document.querySelectorAll(".section")
-    .forEach(s=>s.classList.remove("active"));
+    document.querySelectorAll(".section").forEach(function(section){
+        section.classList.remove("active");
+    });
 
-    document.querySelectorAll(".option")
-    .forEach(o=>o.classList.remove("active"));
+    document.querySelectorAll(".option").forEach(function(option){
+        option.classList.remove("active");
+    });
 
-    document.getElementById(id)
-    .classList.add("active");
+    var selectedSection = document.getElementById(id);
 
-    element.classList.add("active");
+    if(selectedSection){
+        selectedSection.classList.add("active");
+    }
+
+    if(element){
+        element.classList.add("active");
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 }
 
 
 /* =========================
-   FSM DATA
+   FSM PRACTICE
 ========================= */
 
-let fsmStates=[
-    {id:1,name:"State A"},
-    {id:2,name:"State B"},
-    {id:3,name:"State C"}
-];
+var fsmRules = {
 
-let fsmInputs=[
-    {id:1,name:"Input X"},
-    {id:2,name:"Input Y"}
-];
+    "A-X":"B",
+    "B-X":"C",
+    "C-X":"A",
 
+    "A-Y":"A",
+    "B-Y":"B",
+    "C-Y":"C"
+};
 
-/*
-   Example FSM rules
-*/
-
-let fsmRules=[
-    {state:1,input:1,next:2},
-    {state:2,input:1,next:3},
-    {state:3,input:1,next:1},
-
-    {state:1,input:2,next:1},
-    {state:2,input:2,next:2},
-    {state:3,input:2,next:3}
-];
-
-let fsmScore=0;
-let fsmAttempts=0;
-let currentFSMRule=null;
+var fsmScore = 0;
+var fsmAttempts = 0;
 
 
-/* ADD FSM STATE */
-
-function addFSMState(){
-
-    if(fsmStates.length>=10){
-
-        alert("Maximum 10 states allowed.");
-
-        return;
-    }
-
-    let id=Date.now()+Math.random();
-
-    fsmStates.push({
-        id:id,
-        name:"State "+String.fromCharCode(65+fsmStates.length)
-    });
-
-    renderFSM();
-}
-
-
-/* ADD FSM INPUT */
-
-function addFSMInput(){
-
-    let id=Date.now()+Math.random();
-
-    fsmInputs.push({
-        id:id,
-        name:"Input "+(fsmInputs.length+1)
-    });
-
-    renderFSM();
-}
-
-
-/* RENDER FSM */
-
-function renderFSM(){
-
-    let statesBox=
-        document.getElementById("fsmStates");
-
-    let inputsBox=
-        document.getElementById("fsmInputs");
-
-    statesBox.innerHTML="";
-    inputsBox.innerHTML="";
-
-
-    fsmStates.forEach((state,index)=>{
-
-        statesBox.innerHTML+=`
-
-        <div class="item">
-
-        <input
-        value="${state.name}"
-        onchange="fsmStates[${index}].name=this.value">
-
-        </div>
-
-        `;
-
-    });
-
-
-    fsmInputs.forEach((input,index)=>{
-
-        inputsBox.innerHTML+=`
-
-        <div class="item">
-
-        <input
-        value="${input.name}"
-        onchange="fsmInputs[${index}].name=this.value">
-
-        </div>
-
-        `;
-
-    });
-
-
-    document.getElementById("fsmPresent").innerHTML=
-        fsmStates.map(s=>
-        `<option value="${s.id}">
-        ${s.name}
-        </option>`
-        ).join("");
-
-
-    document.getElementById("fsmInputQuestion").innerHTML=
-        fsmInputs.map(i=>
-        `<option value="${i.id}">
-        ${i.name}
-        </option>`
-        ).join("");
-
-
-    document.getElementById("fsmAnswer").innerHTML=
-
-        `<option value="">
-        Select Next State
-        </option>`
-
-        +
-
-        fsmStates.map(s=>
-        `<option value="${s.id}">
-        ${s.name}
-        </option>`
-        ).join("");
-}
-
-
-/* NEW FSM QUESTION */
+/* Generate FSM question */
 
 function newFSMQuestion(){
 
-    if(fsmRules.length===0){
+    var keys = Object.keys(fsmRules);
 
-        alert("No FSM practice rules available.");
+    var randomKey =
+        keys[Math.floor(Math.random() * keys.length)];
 
-        return;
-    }
+    var parts = randomKey.split("-");
 
-    currentFSMRule=
-        fsmRules[
-            Math.floor(
-                Math.random()*fsmRules.length
-            )
-        ];
+    document.getElementById("fsmPresent").value = parts[0];
 
+    document.getElementById("fsmInputQuestion").value = parts[1];
 
-    document.getElementById("fsmPresent").value=
-        currentFSMRule.state;
+    document.getElementById("fsmAnswer").value = "";
 
-    document.getElementById("fsmInputQuestion").value=
-        currentFSMRule.input;
+    document.getElementById("fsmFeedback").textContent = "";
 
-    document.getElementById("fsmAnswer").value="";
-
-    document.getElementById("fsmFeedback").textContent="";
+    document.getElementById("fsmFeedback").className =
+        "feedback";
 }
 
 
-/* CHECK FSM */
+/* Check FSM */
 
 function checkFSM(){
 
-    if(!currentFSMRule){
+    var state =
+        document.getElementById("fsmPresent").value;
 
-        newFSMQuestion();
+    var input =
+        document.getElementById("fsmInputQuestion").value;
 
-        return;
-    }
-
-
-    let answer=
+    var answer =
         document.getElementById("fsmAnswer").value;
 
+    if(answer === ""){
 
-    if(!answer){
-
-        document.getElementById("fsmFeedback").className=
+        document.getElementById("fsmFeedback").className =
             "feedback wrong";
 
-        document.getElementById("fsmFeedback").textContent=
+        document.getElementById("fsmFeedback").textContent =
             "Please select a next state.";
 
         return;
     }
 
+    var key = state + "-" + input;
+
+    var correctAnswer = fsmRules[key];
 
     fsmAttempts++;
 
-
-    if(Number(answer)===currentFSMRule.next){
+    if(answer === correctAnswer){
 
         fsmScore++;
 
-        document.getElementById("fsmFeedback").className=
+        document.getElementById("fsmFeedback").className =
             "feedback correct";
 
-        document.getElementById("fsmFeedback").textContent=
+        document.getElementById("fsmFeedback").textContent =
             "✓ Correct!";
 
     }else{
 
-        document.getElementById("fsmFeedback").className=
+        document.getElementById("fsmFeedback").className =
             "feedback wrong";
 
-        document.getElementById("fsmFeedback").textContent=
-            "✗ Incorrect. Try the next question.";
-
+        document.getElementById("fsmFeedback").textContent =
+            "✗ Incorrect. Correct answer: State " + correctAnswer;
     }
 
-
-    document.getElementById("fsmScore").textContent=
+    document.getElementById("fsmScore").textContent =
         fsmScore;
 
-    document.getElementById("fsmAttempts").textContent=
+    document.getElementById("fsmAttempts").textContent =
         fsmAttempts;
 }
 
 
 /* =========================
-   ASM DATA
+   ASM PRACTICE
 ========================= */
 
-let asmStates=[
-    {id:1,name:"State A"},
-    {id:2,name:"State B"},
-    {id:3,name:"State C"}
-];
+var asmRules = {
 
-let asmConditions=[
-    {id:1,name:"Condition X"},
-    {id:2,name:"Condition Y"}
-];
-
-
-/*
-   Example ASM rules
-*/
-
-let asmRules=[
-    {
-        state:1,
-        condition:1,
-        trueNext:2,
-        falseNext:3
+    "A-X":{
+        trueNext:"B",
+        falseNext:"C"
     },
 
-    {
-        state:2,
-        condition:2,
-        trueNext:3,
-        falseNext:1
+    "B-X":{
+        trueNext:"C",
+        falseNext:"A"
     },
 
-    {
-        state:3,
-        condition:1,
-        trueNext:1,
-        falseNext:2
-    }
-];
+    "C-X":{
+        trueNext:"A",
+        falseNext:"B"
+    },
 
+    "A-Y":{
+        trueNext:"C",
+        falseNext:"A"
+    },
 
-let asmScore=0;
-let asmAttempts=0;
-let currentASMRule=null;
+    "B-Y":{
+        trueNext:"A",
+        falseNext:"B"
+    },
 
-
-/* ADD ASM STATE */
-
-function addASMState(){
-
-    if(asmStates.length>=10){
-
-        alert("Maximum 10 states allowed.");
-
-        return;
+    "C-Y":{
+        trueNext:"B",
+        falseNext:"C"
     }
 
-    let id=Date.now()+Math.random();
+};
 
-    asmStates.push({
-        id:id,
-        name:"State "+String.fromCharCode(65+asmStates.length)
-    });
-
-    renderASM();
-}
+var asmScore = 0;
+var asmAttempts = 0;
 
 
-/* ADD ASM CONDITION */
-
-function addASMCondition(){
-
-    let id=Date.now()+Math.random();
-
-    asmConditions.push({
-        id:id,
-        name:"Condition "+(asmConditions.length+1)
-    });
-
-    renderASM();
-}
-
-
-/* RENDER ASM */
-
-function renderASM(){
-
-    let statesBox=
-        document.getElementById("asmStates");
-
-    let conditionsBox=
-        document.getElementById("asmConditions");
-
-    statesBox.innerHTML="";
-    conditionsBox.innerHTML="";
-
-
-    asmStates.forEach((state,index)=>{
-
-        statesBox.innerHTML+=`
-
-        <div class="item">
-
-        <input
-        value="${state.name}"
-        onchange="asmStates[${index}].name=this.value">
-
-        </div>
-
-        `;
-
-    });
-
-
-    asmConditions.forEach((condition,index)=>{
-
-        conditionsBox.innerHTML+=`
-
-        <div class="item">
-
-        <input
-        value="${condition.name}"
-        onchange="asmConditions[${index}].name=this.value">
-
-        </div>
-
-        `;
-
-    });
-
-
-    document.getElementById("asmPresent").innerHTML=
-
-        asmStates.map(s=>
-        `<option value="${s.id}">
-        ${s.name}
-        </option>`
-        ).join("");
-
-
-    document.getElementById("asmConditionQuestion").innerHTML=
-
-        asmConditions.map(c=>
-        `<option value="${c.id}">
-        ${c.name}
-        </option>`
-        ).join("");
-
-
-    let options=
-
-        `<option value="">
-        Select State
-        </option>`
-
-        +
-
-        asmStates.map(s=>
-        `<option value="${s.id}">
-        ${s.name}
-        </option>`
-        ).join("");
-
-
-    document.getElementById("asmTrueAnswer").innerHTML=
-        options;
-
-    document.getElementById("asmFalseAnswer").innerHTML=
-        options;
-}
-
-
-/* NEW ASM QUESTION */
+/* Generate ASM question */
 
 function newASMQuestion(){
 
-    if(asmRules.length===0){
+    var keys = Object.keys(asmRules);
 
-        alert("No ASM practice rules available.");
+    var randomKey =
+        keys[Math.floor(Math.random() * keys.length)];
 
-        return;
-    }
+    var parts = randomKey.split("-");
 
+    document.getElementById("asmPresent").value =
+        parts[0];
 
-    currentASMRule=
-        asmRules[
-            Math.floor(
-                Math.random()*asmRules.length
-            )
-        ];
+    document.getElementById("asmConditionQuestion").value =
+        parts[1];
 
+    document.getElementById("asmTrueAnswer").value = "";
 
-    document.getElementById("asmPresent").value=
-        currentASMRule.state;
+    document.getElementById("asmFalseAnswer").value = "";
 
-    document.getElementById("asmConditionQuestion").value=
-        currentASMRule.condition;
+    document.getElementById("asmFeedback").textContent = "";
 
-    document.getElementById("asmTrueAnswer").value="";
-    document.getElementById("asmFalseAnswer").value="";
-
-    document.getElementById("asmFeedback").textContent="";
+    document.getElementById("asmFeedback").className =
+        "feedback";
 }
 
 
-/* CHECK ASM */
+/* Check ASM */
 
 function checkASM(){
 
-    if(!currentASMRule){
+    var state =
+        document.getElementById("asmPresent").value;
 
-        newASMQuestion();
+    var condition =
+        document.getElementById("asmConditionQuestion").value;
+
+    var trueAnswer =
+        document.getElementById("asmTrueAnswer").value;
+
+    var falseAnswer =
+        document.getElementById("asmFalseAnswer").value;
+
+    if(trueAnswer === "" || falseAnswer === ""){
+
+        document.getElementById("asmFeedback").className =
+            "feedback wrong";
+
+        document.getElementById("asmFeedback").textContent =
+            "Please select both TRUE and FALSE next states.";
 
         return;
     }
 
+    var key = state + "-" + condition;
 
-    let trueAnswer=
-        document.getElementById("asmTrueAnswer").value;
+    var rule = asmRules[key];
 
-    let falseAnswer=
-        document.getElementById("asmFalseAnswer").value;
+    asmAttempts++;
 
+    if(
+        trueAnswer === rule.trueNext &&
+        falseAnswer === rule.falseNext
+    ){
 
-    if(!trueAnswer || !falseAnswer){
+        asmScore++;
 
-        document.getElementById("asmFeedback").className=
+        document.getElementById("asmFeedback").className =
+            "feedback correct";
+
+        document.getElementById("asmFeedback").textContent =
+            "✓ Correct!";
+
+    }else{
+
+        document.getElementById("asmFeedback").className =
             "feedback wrong";
 
-        document.getElementById("asmFeedback").textContent=
-            "Please select both TRUE and FALSE next states.";
+        document.getElementById("asmFeedback").textContent =
+            "✗ Incorrect. TRUE → State " +
+            rule.trueNext +
+            " | FALSE → State " +
+            rule.falseNext;
+    }
+
+    document.getElementById("asmScore").textContent =
+        asmScore;
+
+    document.getElementById("asmAttempts").textContent =
+        asmAttempts;
+}
+
+
+/* =========================
+   INITIAL SETUP
+========================= */
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    /* Set initial FSM question */
+
+    newFSMQuestion();
+
+    /* Set initial ASM question */
+
+    newASMQuestion();
+
+});
+
+</script>
+
+</body>
+</html>
