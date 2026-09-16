@@ -1,4 +1,11 @@
 # Sequential Sensor Fault Monitor
+🌐 Live Project Website
+
+https://sumaiyah2503.github.io/Sequential-Sensor-Fault-Monitor/
+
+🔬 Sensor Monitor Software
+
+https://sumaiyah2503.github.io/Sequential-Sensor-Fault-Monitor/sensor-monitor.html
 
 ## Project Description
    A software-based Synchronous Sequential Sensor Fault Monitor that monitors temperature, pressure, and vibration values. The system uses FSM and ASM concepts to classify sensor conditions and perform state transitions between NORMAL, WARNING, FAULT, and RECOVERY based on clock pulses.
