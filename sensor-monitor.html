@@ -1,681 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Synchronous Sequential Circuit</title>
+<title>Sequential Sensor Fault Monitor</title>
 
 <style>
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
 body {
     min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #ffffff;
-    overflow-x: hidden;
-
-    background:
-        radial-gradient(circle at 15% 20%,
-            rgba(0, 190, 255, 0.18),
-            transparent 28%),
-        radial-gradient(circle at 85% 75%,
-            rgba(0, 255, 200, 0.12),
-            transparent 30%),
-        linear-gradient(
-            135deg,
-            #020811 0%,
-            #061522 45%,
-            #020b14 100%
-        );
-
-    position: relative;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-
-    background-image:
-        linear-gradient(
-            90deg,
-            rgba(80, 200, 255, 0.07) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            rgba(80, 200, 255, 0.07) 1px,
-            transparent 1px
-        );
-
-    background-size: 45px 45px;
-
-    mask-image:
-        radial-gradient(
-            circle at center,
-            black 20%,
-            transparent 85%
-        );
-
-    pointer-events: none;
-}
-
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent 10%,
-            rgba(0, 220, 255, 0.12) 10.2%,
-            transparent 10.4%
-        ),
-        linear-gradient(
-            0deg,
-            transparent 72%,
-            rgba(0, 220, 255, 0.10) 72.2%,
-            transparent 72.4%
-        );
-
-    background-size: 180px 180px;
-
-    opacity: 0.7;
-    pointer-events: none;
+    background: linear-gradient(135deg, #050b14, #0b1d2d, #061018);
+    color: white;
+    padding: 30px 15px;
 }
 
 .container {
-    width: 92%;
     max-width: 1100px;
     margin: auto;
-    padding: 35px 0 40px;
-
-    position: relative;
-    z-index: 2;
 }
 
-.header {
+header {
     text-align: center;
     margin-bottom: 30px;
 }
 
-.header .main-title {
-    font-size: clamp(28px, 5vw, 48px);
-    font-weight: 800;
-    letter-spacing: 2px;
-
-    text-shadow:
-        0 0 12px rgba(0, 220, 255, 0.6),
-        0 0 30px rgba(0, 220, 255, 0.25);
+header h1 {
+    color: #00e5ff;
+    font-size: 32px;
+    margin-bottom: 10px;
 }
 
-.header .subtitle {
-    margin-top: 10px;
-    font-size: clamp(17px, 3vw, 23px);
-    color: #79dff5;
-    letter-spacing: 1px;
+header p {
+    color: #b9c9d6;
+    font-size: 17px;
 }
 
-.header .project-name {
-    margin-top: 8px;
-    font-size: 15px;
-    color: #a7c5d0;
+.card {
+    background: rgba(10, 25, 40, 0.96);
+    border: 1px solid #294b60;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
 }
 
-.dashboard {
-    position: relative;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(10, 30, 45, 0.92),
-            rgba(3, 15, 25, 0.94)
-        );
-
-    border: 1px solid rgba(80, 220, 255, 0.25);
-    border-radius: 25px;
-
-    padding: 28px;
-
-    box-shadow:
-        0 25px 70px rgba(0, 0, 0, 0.55),
-        inset 0 0 40px rgba(0, 180, 255, 0.04);
-
-    backdrop-filter: blur(15px);
+h2 {
+    color: #00e5ff;
+    margin-bottom: 15px;
 }
 
-.section-title {
-    color: #7ce7ff;
-    font-size: 19px;
-    margin-bottom: 18px;
-    letter-spacing: 0.5px;
+p {
+    color: #d5e0e7;
+    line-height: 1.7;
 }
+
+
+/* FLOW */
+
+.flow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.flow-box {
+    background: #102c3e;
+    border: 1px solid #00bcd4;
+    border-radius: 10px;
+    padding: 14px 18px;
+    text-align: center;
+}
+
+.arrow {
+    color: #00e5ff;
+    font-size: 24px;
+}
+
+
+/* INPUT */
 
 .inputs {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 18px;
+    margin-top: 20px;
 }
 
-.sensor {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20, 55, 70, 0.72),
-            rgba(5, 20, 30, 0.8)
-        );
-
-    border: 1px solid rgba(100, 220, 255, 0.16);
-
-    border-radius: 18px;
-    padding: 20px;
-
-    box-shadow:
-        inset 0 0 20px rgba(0, 220, 255, 0.04),
-        0 10px 25px rgba(0, 0, 0, 0.25);
-
-    transition: 0.25s;
-}
-
-.sensor:hover {
-    transform: translateY(-3px);
-
-    border-color: rgba(100, 230, 255, 0.4);
-
-    box-shadow:
-        0 10px 30px rgba(0, 200, 255, 0.12);
-}
-
-.sensor label {
+label {
     display: block;
-    color: #b9dce6;
-    font-size: 14px;
-    margin-bottom: 10px;
+    color: #a9dce9;
+    font-weight: bold;
+    margin-bottom: 8px;
 }
 
-.sensor input {
+input {
     width: 100%;
-
     padding: 13px;
-
-    border-radius: 10px;
-    border: 1px solid rgba(100, 220, 255, 0.2);
-
-    background: rgba(0, 8, 15, 0.75);
-
+    border-radius: 8px;
+    border: 1px solid #42677c;
+    background: #07131e;
     color: white;
-
     font-size: 16px;
+}
+
+input:focus {
     outline: none;
+    border-color: #00e5ff;
 }
 
-.sensor input:focus {
-    border-color: #4ddfff;
 
-    box-shadow:
-        0 0 12px rgba(0, 220, 255, 0.18);
-}
+/* BUTTONS */
 
 .buttons {
     display: flex;
+    justify-content: center;
     gap: 15px;
     margin-top: 25px;
 }
 
 button {
-    flex: 1;
-
-    padding: 15px;
-
+    padding: 14px 30px;
     border: none;
-    border-radius: 12px;
-
-    font-size: 15px;
-    font-weight: 700;
-
+    border-radius: 9px;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-
-    transition: 0.25s;
 }
 
-.clock {
-    background:
-        linear-gradient(
-            135deg,
-            #0799c5,
-            #05c8d9
-        );
+#clockButton {
+    background: #00d5ef;
+    color: #001018;
+}
 
+#resetButton {
+    background: #304252;
     color: white;
-
-    box-shadow:
-        0 0 20px rgba(0, 210, 255, 0.2);
 }
 
-.clock:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 0 28px rgba(0, 220, 255, 0.35);
+button:active {
+    transform: scale(0.97);
 }
 
-.reset {
-    background:
-        linear-gradient(
-            135deg,
-            #263c4b,
-            #172833
-        );
 
-    color: #d5e9ef;
-}
+/* RESULTS */
 
-.reset:hover {
-    transform: translateY(-2px);
-}
-
-.result {
-    margin-top: 25px;
-
+.results {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-
     gap: 15px;
+    margin-top: 20px;
 }
 
-.card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(8, 27, 38, 0.85),
-            rgba(3, 15, 23, 0.9)
-        );
-
-    border: 1px solid rgba(100, 210, 240, 0.13);
-
-    border-radius: 15px;
-
+.result-box {
+    background: #07131f;
+    border: 1px solid #29485d;
+    border-radius: 10px;
     padding: 18px;
 }
 
-.card span {
-    display: block;
-
-    color: #83aebb;
-
-    font-size: 12px;
-
+.result-title {
+    color: #8da8b8;
+    font-size: 14px;
     margin-bottom: 8px;
-
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
 }
 
-.card strong {
+.result-value {
+    color: #00e5ff;
     font-size: 20px;
-
-    color: #f2fbff;
-}
-
-.transition {
-    grid-column: span 2;
-
-    text-align: center;
-
-    padding: 23px;
-
-    border-color:
-        rgba(0, 220, 255, 0.25);
-}
-
-.transition strong {
-    font-size: clamp(20px, 4vw, 28px);
-
-    color: #73e6ff;
-
-    text-shadow:
-        0 0 12px rgba(0, 220, 255, 0.25);
-}
-
-/* =========================
-   FSM PANEL
-========================= */
-
-.fsm {
-    margin-top: 28px;
-
-    padding: 22px;
-
-    border-radius: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(7, 32, 43, 0.78),
-            rgba(2, 15, 24, 0.9)
-        );
-
-    border: 1px solid rgba(80, 220, 255, 0.18);
-
-    text-align: center;
-}
-
-.fsm-description {
-    color: #8eabb5;
-    font-size: 13px;
-    margin-bottom: 20px;
-}
-
-.fsm-diagram {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-
-    margin-top: 20px;
-}
-
-.state-box {
-    min-width: 120px;
-
-    padding: 15px 12px;
-
-    border-radius: 14px;
-
-    border: 2px solid rgba(100, 220, 255, 0.35);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20, 55, 70, 0.9),
-            rgba(4, 20, 30, 0.95)
-        );
-
-    box-shadow:
-        0 0 18px rgba(0, 200, 255, 0.08);
-}
-
-.state-box strong {
-    display: block;
-    color: #e9fbff;
-    font-size: 16px;
-}
-
-.state-box small {
-    display: block;
-    margin-top: 5px;
-    color: #8eabb5;
-    font-size: 11px;
-}
-
-.arrow {
-    font-size: 25px;
-    color: #71e5ff;
     font-weight: bold;
 }
 
-.fsm-note {
-    margin-top: 18px;
 
-    color: #a9d8e3;
+/* HISTORY */
 
-    font-size: 13px;
-
-    line-height: 1.6;
-}
-
-/* =========================
-   ASM PANEL
-========================= */
-
-.asm {
-    margin-top: 28px;
-
-    padding: 22px;
-
-    border-radius: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(7, 32, 43, 0.78),
-            rgba(2, 15, 24, 0.9)
-        );
-
-    border: 1px solid rgba(80, 220, 255, 0.18);
-
-    text-align: center;
-}
-
-.asm-flow {
+.history {
     margin-top: 15px;
-
-    font-size: clamp(14px, 2.5vw, 18px);
-
-    color: #b8effa;
-
-    letter-spacing: 0.5px;
-
-    line-height: 1.8;
 }
 
-.asm-description {
-    margin-top: 12px;
-
-    color: #8eabb5;
-
-    font-size: 13px;
-}
-
-/* =========================
-   LOGIC INFORMATION
-========================= */
-
-.logic-panel {
-    margin-top: 28px;
-
-    padding: 22px;
-
-    border-radius: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(7, 32, 43, 0.78),
-            rgba(2, 15, 24, 0.9)
-        );
-
-    border: 1px solid rgba(80, 220, 255, 0.18);
-}
-
-.logic-list {
-    margin-top: 12px;
-    padding-left: 20px;
-
-    color: #b8dce5;
-
-    line-height: 1.8;
-}
-
-.logic-list li {
-    margin-bottom: 5px;
-}
-
-/* =========================
-   PROBLEM STATEMENT
-========================= */
-
-.problem-solution {
-    margin-top: 28px;
-
-    padding: 22px;
-
-    border-radius: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(7, 32, 43, 0.78),
-            rgba(2, 15, 24, 0.9)
-        );
-
-    border: 1px solid rgba(80, 220, 255, 0.18);
-}
-
-.problem-box,
-.solution-box {
-    margin-top: 18px;
-
-    padding: 20px;
-
-    border-radius: 15px;
-
-    background: rgba(3, 18, 28, 0.75);
-
-    border: 1px solid rgba(100, 210, 240, 0.13);
-}
-
-.problem-box h3,
-.solution-box h3 {
-    color: #73e6ff;
-
-    font-size: 17px;
-
+.history-item {
+    background: #07131f;
+    border: 1px solid #29485d;
+    border-radius: 9px;
+    padding: 15px;
     margin-bottom: 10px;
 }
 
-.problem-box p,
-.solution-box p {
-    color: #b8dce5;
-
-    font-size: 14px;
-
-    line-height: 1.7;
+.history-item strong {
+    color: #00e5ff;
 }
 
-.solution-flow {
-    margin-top: 22px;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
+.history-item span {
+    color: #dce6ec;
 }
 
-.flow-box {
-    padding: 12px 15px;
 
-    border-radius: 10px;
+/* FINAL RESULT */
 
-    background:
-        rgba(15, 55, 70, 0.8);
+.final-result {
+    background: linear-gradient(
+        135deg,
+        #0c2738,
+        #07131f
+    );
 
-    border: 1px solid rgba(100, 220, 255, 0.25);
+    border: 2px solid #00e5ff;
 
-    color: #e9fbff;
+    border-radius: 15px;
 
-    font-size: 13px;
-
-    font-weight: 700;
+    padding: 25px;
 
     text-align: center;
+
+    box-shadow:
+        0 0 25px rgba(0,229,255,0.12);
 }
 
-.flow-arrow {
-    color: #71e5ff;
+.final-result h2 {
+    color: #00e5ff;
+    margin-bottom: 20px;
+}
 
-    font-size: 22px;
+.final-line {
+    margin: 12px 0;
+    font-size: 17px;
+    color: #dce6ec;
+}
 
+.final-value {
+    color: #7cff8a;
     font-weight: bold;
+    font-size: 20px;
 }
 
-.solution-note {
-    margin-top: 18px;
+#finalState {
+    font-size: 28px;
+    color: #7cff8a;
+}
 
+
+/* TABLE */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th,
+td {
+    border: 1px solid #355569;
+    padding: 12px;
     text-align: center;
-
-    color: #8eabb5;
-
-    font-size: 13px;
-
-    line-height: 1.6;
 }
 
-/* =========================
-   FOOTER
-========================= */
+th {
+    background: #123246;
+    color: #00e5ff;
+}
 
-.footer {
+td {
+    color: #dce6ec;
+}
+
+
+/* STATE FLOW */
+
+.state-flow {
     text-align: center;
-
-    margin-top: 20px;
-
-    color: #6d8e99;
-
-    font-size: 12px;
+    color: #7eeaff;
+    font-size: 20px;
+    padding: 15px;
+    line-height: 2;
 }
 
-/* =========================
-   MOBILE
-========================= */
 
-@media (max-width: 750px) {
+/* MOBILE */
 
-    .inputs {
+@media (max-width: 700px) {
+
+    .inputs,
+    .results {
         grid-template-columns: 1fr;
     }
 
-    .result {
-        grid-template-columns: 1fr;
-    }
-
-    .transition {
-        grid-column: span 1;
-    }
-
-    .buttons {
-        flex-direction: column;
-    }
-
-    .dashboard {
-        padding: 20px;
-    }
-
-    .fsm-diagram {
-        flex-direction: column;
+    header h1 {
+        font-size: 25px;
     }
 
     .arrow {
         transform: rotate(90deg);
     }
-
-    .state-box {
-        width: 85%;
-    }
-
-    .solution-flow {
-        flex-direction: column;
-    }
-
-    .flow-arrow {
-        transform: rotate(90deg);
-    }
-
 }
 
 </style>
+
 </head>
 
 
@@ -683,434 +312,1107 @@ button {
 
 <div class="container">
 
-    <!-- HEADER -->
 
-    <div class="header">
+<!-- HEADER -->
 
-        <div class="main-title">
-            SYNCHRONOUS SEQUENTIAL CIRCUIT
+<header>
+
+    <h1>
+        SYNCHRONOUS SEQUENTIAL CIRCUIT
+    </h1>
+
+    <p>
+        Sequential Sensor Fault Monitor
+    </p>
+
+</header>
+
+
+<!-- PROBLEM STATEMENT -->
+
+<div class="card">
+
+    <h2>
+        Problem Statement
+    </h2>
+
+    <p>
+        Sensor readings such as temperature,
+        pressure and vibration may become
+        abnormal during system operation.
+        The system must detect abnormal sensor
+        conditions and monitor them sequentially
+        using synchronous sequential logic.
+    </p>
+
+</div>
+
+
+<!-- SOFTWARE SOLUTION -->
+
+<div class="card">
+
+    <h2>
+        Software Solution
+    </h2>
+
+    <p>
+        This software simulates a synchronous
+        sequential sensor fault monitor.
+        Sensor inputs are checked against
+        threshold values. The FSM and ASM
+        based sequential logic updates the
+        state only when a CLOCK PULSE is applied.
+    </p>
+
+
+    <div class="flow">
+
+        <div class="flow-box">
+            Sensor Input
         </div>
 
-        <div class="subtitle">
-            Sequential Sensor Fault Monitor
+        <div class="arrow">→</div>
+
+        <div class="flow-box">
+            Threshold Checking
         </div>
 
-        <div class="project-name">
-            FSM + ASM Based Sequential Fault Detection System
+        <div class="arrow">→</div>
+
+        <div class="flow-box">
+            Normal / Abnormal
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-box">
+            Clock Pulse
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-box">
+            FSM + ASM
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-box">
+            Next State
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SENSOR INPUT -->
+
+<div class="card">
+
+    <h2>
+        Sensor Input
+    </h2>
+
+
+    <div class="inputs">
+
+        <div>
+
+            <label>
+                Temperature (°C)
+            </label>
+
+            <input
+                id="temperature"
+                type="number"
+                value="30"
+                step="0.1">
+
+        </div>
+
+
+        <div>
+
+            <label>
+                Pressure (kPa)
+            </label>
+
+            <input
+                id="pressure"
+                type="number"
+                value="100"
+                step="0.1">
+
+        </div>
+
+
+        <div>
+
+            <label>
+                Vibration (mm/s)
+            </label>
+
+            <input
+                id="vibration"
+                type="number"
+                value="2"
+                step="0.1">
+
         </div>
 
     </div>
 
 
-    <!-- MAIN DASHBOARD -->
+    <div class="buttons">
 
-    <div class="dashboard">
+        <button id="clockButton">
+            CLOCK PULSE
+        </button>
 
-        <h2 class="section-title">
-            Sensor Input Monitoring
+        <button id="resetButton">
+            RESET
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- MONITORING RESULT -->
+
+<div class="card">
+
+    <h2>
+        Monitoring Result
+    </h2>
+
+
+    <div class="results">
+
+
+        <div class="result-box">
+
+            <div class="result-title">
+                Sensor Condition
+            </div>
+
+            <div
+                class="result-value"
+                id="sensorCondition">
+
+                NORMAL
+
+            </div>
+
+        </div>
+
+
+        <div class="result-box">
+
+            <div class="result-title">
+                Present State
+            </div>
+
+            <div
+                class="result-value"
+                id="presentState">
+
+                NORMAL
+
+            </div>
+
+        </div>
+
+
+        <div class="result-box">
+
+            <div class="result-title">
+                Next State
+            </div>
+
+            <div
+                class="result-value"
+                id="nextState">
+
+                NORMAL
+
+            </div>
+
+        </div>
+
+
+        <div class="result-box">
+
+            <div class="result-title">
+                State Transition
+            </div>
+
+            <div
+                class="result-value"
+                id="transition">
+
+                NORMAL → NORMAL
+
+            </div>
+
+        </div>
+
+
+        <div class="result-box">
+
+            <div class="result-title">
+                Clock Count
+            </div>
+
+            <div
+                class="result-value"
+                id="clockCount">
+
+                0
+
+            </div>
+
+        </div>
+
+
+        <div class="result-box">
+
+            <div class="result-title">
+                Clock Status
+            </div>
+
+            <div
+                class="result-value"
+                id="clockStatus">
+
+                WAITING
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- STATE TRANSITION HISTORY -->
+
+<div class="card">
+
+    <h2>
+        State Transition History
+    </h2>
+
+    <div
+        class="history"
+        id="history">
+
+        <div class="history-item">
+            No clock pulse applied yet.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- THRESHOLD VALUES -->
+
+<div class="card">
+
+    <h2>
+        Threshold Values
+    </h2>
+
+
+    <table>
+
+        <tr>
+
+            <th>
+                Sensor
+            </th>
+
+            <th>
+                Normal
+            </th>
+
+            <th>
+                Abnormal
+            </th>
+
+        </tr>
+
+
+        <tr>
+
+            <td>
+                Temperature
+            </td>
+
+            <td>
+                ≤ 50 °C
+            </td>
+
+            <td>
+                &gt; 50 °C
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>
+                Pressure
+            </td>
+
+            <td>
+                90 – 110 kPa
+            </td>
+
+            <td>
+                &lt; 90 or &gt; 110 kPa
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>
+                Vibration
+            </td>
+
+            <td>
+                ≤ 5 mm/s
+            </td>
+
+            <td>
+                &gt; 5 mm/s
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- STATE FLOW -->
+
+<div class="card">
+
+    <h2>
+        Sequential State Flow
+    </h2>
+
+    <div class="state-flow">
+
+        NORMAL
+        →
+        WARNING
+        →
+        FAULT
+        →
+        RECOVERY
+        →
+        NORMAL
+
+    </div>
+
+</div>
+
+
+<!-- STATE TRANSITION TABLE -->
+
+<div class="card">
+
+    <h2>
+        State Transition Table
+    </h2>
+
+
+    <table>
+
+        <tr>
+
+            <th>
+                Present State
+            </th>
+
+            <th>
+                Sensor Condition
+            </th>
+
+            <th>
+                Next State
+            </th>
+
+        </tr>
+
+
+        <tr>
+            <td>NORMAL</td>
+            <td>NORMAL</td>
+            <td>NORMAL</td>
+        </tr>
+
+
+        <tr>
+            <td>NORMAL</td>
+            <td>ABNORMAL</td>
+            <td>WARNING</td>
+        </tr>
+
+
+        <tr>
+            <td>WARNING</td>
+            <td>NORMAL</td>
+            <td>NORMAL</td>
+        </tr>
+
+
+        <tr>
+            <td>WARNING</td>
+            <td>ABNORMAL</td>
+            <td>FAULT</td>
+        </tr>
+
+
+        <tr>
+            <td>FAULT</td>
+            <td>NORMAL</td>
+            <td>RECOVERY</td>
+        </tr>
+
+
+        <tr>
+            <td>FAULT</td>
+            <td>ABNORMAL</td>
+            <td>FAULT</td>
+        </tr>
+
+
+        <tr>
+            <td>RECOVERY</td>
+            <td>NORMAL</td>
+            <td>NORMAL</td>
+        </tr>
+
+
+        <tr>
+            <td>RECOVERY</td>
+            <td>ABNORMAL</td>
+            <td>FAULT</td>
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- ==============================
+     FINAL RESULT
+     ============================== -->
+
+<div class="card">
+
+    <div class="final-result">
+
+        <h2>
+            FINAL RESULT
         </h2>
 
 
-        <!-- SENSOR INPUTS -->
-
-        <div class="inputs">
-
-            <div class="sensor">
-
-                <label>
-                    🌡️ Temperature (°C)
-                </label>
-
-                <input
-                    id="temperature"
-                    type="number"
-                    value="30"
-                >
-
-            </div>
-
-
-            <div class="sensor">
-
-                <label>
-                    💨 Pressure (kPa)
-                </label>
-
-                <input
-                    id="pressure"
-                    type="number"
-                    value="100"
-                >
-
-            </div>
-
-
-            <div class="sensor">
-
-                <label>
-                    📳 Vibration (mm/s)
-                </label>
-
-                <input
-                    id="vibration"
-                    type="number"
-                    value="2"
-                >
-
-            </div>
-
+        <div class="final-line">
+            Final State:
+            <span
+                class="final-value"
+                id="finalState">
+                NORMAL
+            </span>
         </div>
 
 
-        <!-- CONTROL BUTTONS -->
-
-        <div class="buttons">
-
-            <button
-                class="clock"
-                onclick="clockPulse()"
-            >
-                ⚡ CLOCK PULSE
-            </button>
-
-            <button
-                class="reset"
-                onclick="resetSystem()"
-            >
-                ↻ RESET
-            </button>
-
+        <div class="final-line">
+            Final Sensor Condition:
+            <span
+                class="final-value"
+                id="finalCondition">
+                NORMAL
+            </span>
         </div>
 
 
-        <!-- RESULTS -->
-
-        <div class="result">
-
-            <div class="card">
-
-                <span>
-                    Sensor Condition
-                </span>
-
-                <strong id="condition">
-                    NORMAL
-                </strong>
-
-            </div>
-
-
-            <div class="card">
-
-                <span>
-                    Previous State
-                </span>
-
-                <strong id="previous">
-                    NORMAL
-                </strong>
-
-            </div>
-
-
-            <div class="card">
-
-                <span>
-                    Current State
-                </span>
-
-                <strong id="current">
-                    NORMAL
-                </strong>
-
-            </div>
-
-
-            <div class="card">
-
-                <span>
-                    Clock Status
-                </span>
-
-                <strong id="clock">
-                    Waiting
-                </strong>
-
-            </div>
-
-
-            <div class="card transition">
-
-                <span>
-                    State Transition
-                </span>
-
-                <strong id="transition">
-                    NORMAL → NORMAL
-                </strong>
-
-            </div>
-
+        <div class="final-line">
+            Total Clock Pulses:
+            <span
+                class="final-value"
+                id="finalClock">
+                0
+            </span>
         </div>
 
 
-        <!-- FSM FLOW -->
-
-        <div class="fsm">
-
-            <h2 class="section-title">
-                FSM State Diagram
-            </h2>
-
-            <div class="fsm-description">
-                FSM defines the system states and the transitions between them.
-            </div>
-
-            <div class="fsm-diagram">
-
-                <div class="state-box">
-                    <strong>NORMAL</strong>
-                    <small>Initial State</small>
-                </div>
-
-                <div class="arrow">→</div>
-
-                <div class="state-box">
-                    <strong>WARNING</strong>
-                    <small>First Abnormal</small>
-                </div>
-
-                <div class="arrow">→</div>
-
-                <div class="state-box">
-                    <strong>FAULT</strong>
-                    <small>Continued Abnormal</small>
-                </div>
-
-                <div class="arrow">→</div>
-
-                <div class="state-box">
-                    <strong>RECOVERY</strong>
-                    <small>Normal After Fault</small>
-                </div>
-
-                <div class="arrow">→</div>
-
-                <div class="state-box">
-                    <strong>NORMAL</strong>
-                    <small>Restored State</small>
-                </div>
-
-            </div>
-
-            <div class="fsm-note">
-                Transitions are evaluated according to the sensor condition
-                and occur synchronously when a clock pulse is applied.
-            </div>
-
+        <div class="final-line">
+            State Sequence:
+            <span
+                class="final-value"
+                id="finalSequence">
+                NORMAL
+            </span>
         </div>
 
 
-        <!-- ASM FLOW -->
-
-        <div class="asm">
-
-            <h2 class="section-title">
-                ASM State Flow
-            </h2>
-
-            <div class="asm-flow">
-                NORMAL → WARNING → FAULT → RECOVERY → NORMAL
-            </div>
-
-            <div class="asm-description">
-                ASM represents the sequential decision-making flow of the system.
-            </div>
-
-        </div>
-
-
-        <!-- CORE LOGIC -->
-
-        <div class="logic-panel">
-
-            <h2 class="section-title">
-                Core Digital Logic
-            </h2>
-
-            <ul class="logic-list">
-
-                <li>
-                    Sensor values are compared with predefined threshold values.
-                </li>
-
-                <li>
-                    The sensor condition is classified as NORMAL or ABNORMAL.
-                </li>
-
-                <li>
-                    FSM determines the current state and next-state transition.
-                </li>
-
-                <li>
-                    ASM represents the sequential decision-making process.
-                </li>
-
-                <li>
-                    State changes occur only when a clock pulse is applied.
-                </li>
-
-            </ul>
-
-        </div>
-
-
-        <!-- PROBLEM STATEMENT & SOFTWARE SOLUTION -->
-
-        <div class="problem-solution">
-
-            <h2 class="section-title">
-                Problem Statement & Software Solution
-            </h2>
-
-
-            <div class="problem-box">
-
-                <h3>
-                    Problem Statement
-                </h3>
-
-                <p>
-                    Monitoring multiple sensor parameters continuously can make
-                    it difficult to identify abnormal conditions and track the
-                    progression of a fault. A sequential monitoring system is
-                    required to detect abnormal sensor inputs and update the
-                    fault state synchronously with a clock.
-                </p>
-
-            </div>
-
-
-            <div class="solution-box">
-
-                <h3>
-                    Proposed Software Solution
-                </h3>
-
-                <p>
-                    A software-based Sequential Sensor Fault Monitor is
-                    implemented to take temperature, pressure and vibration as
-                    sensor inputs. The readings are compared with predefined
-                    threshold values and classified as NORMAL or ABNORMAL.
-                    FSM and ASM sequential logic determine the next state when
-                    a clock pulse is applied.
-                </p>
-
-
-                <!-- IMPLEMENTATION FLOW -->
-
-                <div class="solution-flow">
-
-                    <div class="flow-box">
-                        SENSOR INPUT
-                        <br>
-                        Temperature
-                        <br>
-                        Pressure
-                        <br>
-                        Vibration
-                    </div>
-
-                    <div class="flow-arrow">
-                        →
-                    </div>
-
-                    <div class="flow-box">
-                        THRESHOLD
-                        <br>
-                        CHECKING
-                    </div>
-
-                    <div class="flow-arrow">
-                        →
-                    </div>
-
-                    <div class="flow-box">
-                        NORMAL /
-                        <br>
-                        ABNORMAL
-                    </div>
-
-                    <div class="flow-arrow">
-                        →
-                    </div>
-
-                    <div class="flow-box">
-                        CLOCK
-                        <br>
-                        PULSE
-                    </div>
-
-                    <div class="flow-arrow">
-                        →
-                    </div>
-
-                    <div class="flow-box">
-                        FSM + ASM
-                        <br>
-                        LOGIC
-                    </div>
-
-                    <div class="flow-arrow">
-                        →
-                    </div>
-
-                    <div class="flow-box">
-                        STATE
-                        <br>
-                        OUTPUT
-                    </div>
-
-                </div>
-
-
-                <div class="solution-note">
-
-                    The software provides a synchronous sequential response
-                    by changing the system state only when a clock pulse is
-                    applied.
-
-                </div>
-
-            </div>
-
+        <div class="final-line">
+            Fault Detection:
+            <span
+                class="final-value"
+                id="faultResult">
+                No Fault Detected
+            </span>
         </div>
 
     </div>
 
+</div>
 
-    <div class="footer">
-        Sequential Sensor Fault Monitor • FSM + ASM Based Synchronous Sequential Circuit
-    </div>
 
 </div>
 
 
 <script>
 
-/* =========================
+
+/* =================================
    INITIAL STATE
-========================= */
+   ================================= */
 
 let currentState = "NORMAL";
 
+let clockCount = 0;
 
-/* =========================
-   SENSOR CONDITION
-========================= */
+let stateSequence = ["NORMAL"];
 
-function getCondition() {
+let lastCondition = "NORMAL";
 
-    const temperature =
-        Number(
-            document.getElementB
+
+/* =================================
+   ELEMENTS
+   ================================= */
+
+const temperature =
+    document.getElementById("temperature");
+
+const pressure =
+    document.getElementById("pressure");
+
+const vibration =
+    document.getElementById("vibration");
+
+
+const sensorCondition =
+    document.getElementById(
+        "sensorCondition"
+    );
+
+const presentState =
+    document.getElementById(
+        "presentState"
+    );
+
+const nextState =
+    document.getElementById(
+        "nextState"
+    );
+
+const transition =
+    document.getElementById(
+        "transition"
+    );
+
+const clockDisplay =
+    document.getElementById(
+        "clockCount"
+    );
+
+const clockStatus =
+    document.getElementById(
+        "clockStatus"
+    );
+
+const history =
+    document.getElementById(
+        "history"
+    );
+
+
+const finalState =
+    document.getElementById(
+        "finalState"
+    );
+
+const finalCondition =
+    document.getElementById(
+        "finalCondition"
+    );
+
+const finalClock =
+    document.getElementById(
+        "finalClock"
+    );
+
+const finalSequence =
+    document.getElementById(
+        "finalSequence"
+    );
+
+const faultResult =
+    document.getElementById(
+        "faultResult"
+    );
+
+
+const clockButton =
+    document.getElementById(
+        "clockButton"
+    );
+
+const resetButton =
+    document.getElementById(
+        "resetButton"
+    );
+
+
+/* =================================
+   SENSOR CHECK
+   ================================= */
+
+function checkSensorCondition() {
+
+    const temp =
+        parseFloat(
+            temperature.value
+        );
+
+    const press =
+        parseFloat(
+            pressure.value
+        );
+
+    const vib =
+        parseFloat(
+            vibration.value
+        );
+
+
+    if (
+        temp > 50 ||
+        press < 90 ||
+        press > 110 ||
+        vib > 5
+    ) {
+
+        return "ABNORMAL";
+
+    }
+
+
+    return "NORMAL";
+}
+
+
+/* =================================
+   NEXT STATE
+   ================================= */
+
+function calculateNextState(
+    present,
+    condition
+) {
+
+
+    if (
+        present === "NORMAL"
+    ) {
+
+        if (
+            condition === "ABNORMAL"
+        ) {
+
+            return "WARNING";
+
+        }
+
+        return "NORMAL";
+    }
+
+
+    if (
+        present === "WARNING"
+    ) {
+
+        if (
+            condition === "ABNORMAL"
+        ) {
+
+            return "FAULT";
+
+        }
+
+        return "NORMAL";
+    }
+
+
+    if (
+        present === "FAULT"
+    ) {
+
+        if (
+            condition === "NORMAL"
+        ) {
+
+            return "RECOVERY";
+
+        }
+
+        return "FAULT";
+    }
+
+
+    if (
+        present === "RECOVERY"
+    ) {
+
+        if (
+            condition === "NORMAL"
+        ) {
+
+            return "NORMAL";
+
+        }
+
+        return "FAULT";
+    }
+
+
+    return "NORMAL";
+}
+
+
+/* =================================
+   CLOCK PULSE
+   ================================= */
+
+clockButton.onclick = function() {
+
+
+    /* Read current sensor values */
+
+    const condition =
+        checkSensorCondition();
+
+
+    /* Present state */
+
+    const present =
+        currentState;
+
+
+    /* Calculate next state */
+
+    const next =
+        calculateNextState(
+            present,
+            condition
+        );
+
+
+    /* Update current state */
+
+    currentState =
+        next;
+
+
+    /* Clock count */
+
+    clockCount++;
+
+
+    /* Save condition */
+
+    lastCondition =
+        condition;
+
+
+    /* Save state sequence */
+
+    stateSequence.push(
+        next
+    );
+
+
+    /* ==========================
+       DISPLAY CURRENT RESULT
+       ========================== */
+
+    sensorCondition.innerText =
+        condition;
+
+
+    presentState.innerText =
+        present;
+
+
+    nextState.innerText =
+        next;
+
+
+    transition.innerText =
+        present +
+        " → " +
+        next;
+
+
+    clockDisplay.innerText =
+        clockCount;
+
+
+    clockStatus.innerText =
+        "CLOCK PULSE ACTIVE";
+
+
+    /* ==========================
+       HISTORY
+       ========================== */
+
+    if (
+        clockCount === 1
+    ) {
+
+        history.innerHTML = "";
+
+    }
+
+
+    const item =
+        document.createElement(
+            "div"
+        );
+
+
+    item.className =
+        "history-item";
+
+
+    item.innerHTML =
+        "<strong>Clock " +
+        clockCount +
+        "</strong> : " +
+
+        "<span>" +
+        condition +
+        " | " +
+
+        present +
+        " → " +
+        next +
+        "</span>";
+
+
+    history.appendChild(
+        item
+    );
+
+
+    /* ==========================
+       FINAL RESULT
+       ========================== */
+
+    finalState.innerText =
+        currentState;
+
+
+    finalCondition.innerText =
+        lastCondition;
+
+
+    finalClock.innerText =
+        clockCount;
+
+
+    finalSequence.innerText =
+        stateSequence.join(
+            " → "
+        );
+
+
+    if (
+        stateSequence.includes(
+            "FAULT"
+        )
+    ) {
+
+        faultResult.innerText =
+            "Fault Detected";
+
+        faultResult.style.color =
+            "#ff5c5c";
+
+    }
+
+    else {
+
+        faultResult.innerText =
+            "No Fault Detected";
+
+        faultResult.style.color =
+            "#7cff8a";
+    }
+
+
+    /* ==========================
+       STATE COLOUR
+       ========================== */
+
+    if (
+        next === "NORMAL"
+    ) {
+
+        nextState.style.color =
+            "#7cff8a";
+
+    }
+
+    else if (
+        next === "WARNING"
+    ) {
+
+        nextState.style.color =
+            "#ffd166";
+
+    }
+
+    else if (
+        next === "FAULT"
+    ) {
+
+        nextState.style.color =
+            "#ff5c5c";
+
+    }
+
+    else if (
+        next === "RECOVERY"
+    ) {
+
+        nextState.style.color =
+            "#66d9ff";
+
+    }
+
+};
+
+
+/* =================================
+   RESET
+   ================================= */
+
+resetButton.onclick = function() {
+
+
+    currentState =
+        "NORMAL";
+
+
+    clockCount =
+        0;
+
+
+    stateSequence =
+        ["NORMAL"];
+
+
+    lastCondition =
+        "NORMAL";
+
+
+    temperature.value =
+        "30";
+
+
+    pressure.value =
+        "100";
+
+
+    vibration.value =
+        "2";
+
+
+    sensorCondition.innerText =
+        "NORMAL";
+
+
+    presentState.innerText =
+        "NORMAL";
+
+
+    nextState.innerText =
+        "NORMAL";
+
+
+    transition.innerText =
+        "NORMAL → NORMAL";
+
+
+    clockDisplay.innerText =
+        "0";
+
+
+    clockStatus.innerText =
+        "WAITING";
+
+
+    history.innerHTML =
+        '<div class="history-item">' +
+        'No clock pulse applied yet.' +
+        '</div>';
+
+
+    finalState.innerText =
+        "NORMAL";
+
+
+    finalCondition.innerText =
+        "NORMAL";
+
+
+    finalClock.innerText =
+        "0";
+
+
+    finalSequence.innerText =
+        "NORMAL";
+
+
+    faultResult.innerText =
+        "No Fault Detected";
+
+
+    faultResult.style.color =
+        "#7cff8a";
+
+
+    nextState.style.color =
+        "#7cff8a";
+
+};
+
+</script>
+
+</body>
+</html>
