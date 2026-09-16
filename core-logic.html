@@ -39,8 +39,6 @@ header p{
     margin:28px auto;
 }
 
-/* MAIN OPTIONS */
-
 .options{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -81,8 +79,6 @@ header p{
     color:#9eb4cc;
     font-size:13px;
 }
-
-/* SECTIONS */
 
 .section{
     display:none;
@@ -125,8 +121,6 @@ p,li{
     border-radius:8px;
 }
 
-/* FLOW */
-
 .flow{
     display:flex;
     justify-content:center;
@@ -149,8 +143,6 @@ p,li{
     font-size:22px;
 }
 
-/* TABLE */
-
 table{
     width:100%;
     border-collapse:collapse;
@@ -170,8 +162,6 @@ th{
 td{
     background:#091829;
 }
-
-/* PRACTICE */
 
 .practice{
     border-color:#3d765f;
@@ -247,8 +237,6 @@ button:hover{
     margin-top:10px;
 }
 
-/* EDITOR */
-
 .editor{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -260,8 +248,6 @@ button:hover{
     gap:6px;
     margin:7px 0;
 }
-
-/* ASM */
 
 .decision{
     width:150px;
@@ -292,8 +278,6 @@ button:hover{
 .falseBox{
     border-left:4px solid #ff7474;
 }
-
-/* MOBILE */
 
 @media(max-width:750px){
 
@@ -327,7 +311,7 @@ button:hover{
 
 <div class="container">
 
-<!-- ================= MAIN OPTIONS ================= -->
+<!-- MAIN OPTIONS -->
 
 <div class="options">
 
@@ -352,7 +336,7 @@ button:hover{
 </div>
 
 
-<!-- ================= CORE DIGITAL LOGIC ================= -->
+<!-- CORE DIGITAL LOGIC -->
 
 <section id="core" class="section active">
 
@@ -369,7 +353,6 @@ input and the stored previous state.
 <h3>Basic Sequential Structure</h3>
 
 <div class="flow">
-
 <div class="state">Input</div>
 <div class="arrow">→</div>
 <div class="state">Next-State Logic</div>
@@ -377,7 +360,6 @@ input and the stored previous state.
 <div class="state">State Register</div>
 <div class="arrow">→</div>
 <div class="state">Current State</div>
-
 </div>
 
 <h3>Clock</h3>
@@ -416,7 +398,7 @@ using states, decisions and conditional operations.
 </section>
 
 
-<!-- ================= FSM ================= -->
+<!-- FSM -->
 
 <section id="fsm" class="section">
 
@@ -596,7 +578,7 @@ Score:
 </section>
 
 
-<!-- ================= ASM ================= -->
+<!-- ASM -->
 
 <section id="asm" class="section">
 
@@ -652,7 +634,6 @@ Shows movement from one state to another.
 
 </div>
 
-
 <h3>ASM Chart</h3>
 
 <div class="flow">
@@ -682,7 +663,6 @@ Next State → C
 </div>
 
 </div>
-
 
 <h3>ASM Flow</h3>
 
@@ -813,27 +793,31 @@ Score:
 
 <script>
 
-/* =========================
-   SECTION SWITCHING
-========================= */
+/* SECTION SWITCHING */
 
 function showSection(id,element){
 
-    document.querySelectorAll(".section")
-    .forEach(s=>s.classList.remove("active"));
+    document.querySelectorAll(".section").forEach(function(section){
+        section.classList.remove("active");
+    });
 
-    document.querySelectorAll(".option")
-    .forEach(o=>o.classList.remove("active"));
+    document.querySelectorAll(".option").forEach(function(option){
+        option.classList.remove("active");
+    });
 
-    document.getElementById(id).classList.add("active");
+    var selectedSection = document.getElementById(id);
 
-    element.classList.add("active");
+    if(selectedSection){
+        selectedSection.classList.add("active");
+    }
+
+    if(element){
+        element.classList.add("active");
+    }
 }
 
 
-/* =========================
-   FSM DATA
-========================= */
+/* FSM DATA */
 
 let fsmStates=[
     {id:1,name:"State A"},
@@ -850,7 +834,6 @@ let fsmRules=[
     {state:1,input:1,next:2},
     {state:2,input:1,next:3},
     {state:3,input:1,next:1},
-
     {state:1,input:2,next:1},
     {state:2,input:2,next:2},
     {state:3,input:2,next:3}
@@ -866,7 +849,6 @@ let currentFSMRule=null;
 function addFSMState(){
 
     if(fsmStates.length>=10){
-
         alert("Maximum 10 states allowed.");
         return;
     }
@@ -907,7 +889,7 @@ function renderFSM(){
     statesBox.innerHTML="";
     inputsBox.innerHTML="";
 
-    fsmStates.forEach((state,index)=>{
+    fsmStates.forEach(function(state,index){
 
         statesBox.innerHTML+=`
         <div class="item">
@@ -919,7 +901,7 @@ function renderFSM(){
 
     });
 
-    fsmInputs.forEach((input,index)=>{
+    fsmInputs.forEach(function(input,index){
 
         inputsBox.innerHTML+=`
         <div class="item">
@@ -932,32 +914,20 @@ function renderFSM(){
     });
 
     document.getElementById("fsmPresent").innerHTML=
-
-        fsmStates.map(s=>
-        `<option value="${s.id}">
-        ${s.name}
-        </option>`
-        ).join("");
+        fsmStates.map(function(s){
+            return `<option value="${s.id}">${s.name}</option>`;
+        }).join("");
 
     document.getElementById("fsmInputQuestion").innerHTML=
-
-        fsmInputs.map(i=>
-        `<option value="${i.id}">
-        ${i.name}
-        </option>`
-        ).join("");
+        fsmInputs.map(function(i){
+            return `<option value="${i.id}">${i.name}</option>`;
+        }).join("");
 
     document.getElementById("fsmAnswer").innerHTML=
-
-        `<option value="">
-        Select Next State
-        </option>`+
-
-        fsmStates.map(s=>
-        `<option value="${s.id}">
-        ${s.name}
-        </option>`
-        ).join("");
+        `<option value="">Select Next State</option>`+
+        fsmStates.map(function(s){
+            return `<option value="${s.id}">${s.name}</option>`;
+        }).join("");
 }
 
 
@@ -966,15 +936,12 @@ function renderFSM(){
 function newFSMQuestion(){
 
     if(fsmRules.length===0){
-
         alert("No FSM practice rules available.");
         return;
     }
 
     currentFSMRule=
-        fsmRules[
-            Math.floor(Math.random()*fsmRules.length)
-        ];
+        fsmRules[Math.floor(Math.random()*fsmRules.length)];
 
     document.getElementById("fsmPresent").value=
         currentFSMRule.state;
@@ -993,7 +960,6 @@ function newFSMQuestion(){
 function checkFSM(){
 
     if(!currentFSMRule){
-
         newFSMQuestion();
         return;
     }
@@ -1033,17 +999,12 @@ function checkFSM(){
             "✗ Incorrect. Try the next question.";
     }
 
-    document.getElementById("fsmScore").textContent=
-        fsmScore;
-
-    document.getElementById("fsmAttempts").textContent=
-        fsmAttempts;
+    document.getElementById("fsmScore").textContent=fsmScore;
+    document.getElementById("fsmAttempts").textContent=fsmAttempts;
 }
 
 
-/* =========================
-   ASM DATA
-========================= */
+/* ASM DATA */
 
 let asmStates=[
     {id:1,name:"State A"},
@@ -1057,26 +1018,9 @@ let asmConditions=[
 ];
 
 let asmRules=[
-    {
-        state:1,
-        condition:1,
-        trueNext:2,
-        falseNext:3
-    },
-
-    {
-        state:2,
-        condition:2,
-        trueNext:3,
-        falseNext:1
-    },
-
-    {
-        state:3,
-        condition:1,
-        trueNext:1,
-        falseNext:2
-    }
+    {state:1,condition:1,trueNext:2,falseNext:3},
+    {state:2,condition:2,trueNext:3,falseNext:1},
+    {state:3,condition:1,trueNext:1,falseNext:2}
 ];
 
 let asmScore=0;
@@ -1089,7 +1033,6 @@ let currentASMRule=null;
 function addASMState(){
 
     if(asmStates.length>=10){
-
         alert("Maximum 10 states allowed.");
         return;
     }
@@ -1130,7 +1073,7 @@ function renderASM(){
     statesBox.innerHTML="";
     conditionsBox.innerHTML="";
 
-    asmStates.forEach((state,index)=>{
+    asmStates.forEach(function(state,index){
 
         statesBox.innerHTML+=`
         <div class="item">
@@ -1142,7 +1085,7 @@ function renderASM(){
 
     });
 
-    asmConditions.forEach((condition,index)=>{
+    asmConditions.forEach(function(condition,index){
 
         conditionsBox.innerHTML+=`
         <div class="item">
@@ -1155,32 +1098,20 @@ function renderASM(){
     });
 
     document.getElementById("asmPresent").innerHTML=
-
-        asmStates.map(s=>
-        `<option value="${s.id}">
-        ${s.name}
-        </option>`
-        ).join("");
+        asmStates.map(function(s){
+            return `<option value="${s.id}">${s.name}</option>`;
+        }).join("");
 
     document.getElementById("asmConditionQuestion").innerHTML=
-
-        asmConditions.map(c=>
-        `<option value="${c.id}">
-        ${c.name}
-        </option>`
-        ).join("");
+        asmConditions.map(function(c){
+            return `<option value="${c.id}">${c.name}</option>`;
+        }).join("");
 
     let options=
-
-        `<option value="">
-        Select State
-        </option>`+
-
-        asmStates.map(s=>
-        `<option value="${s.id}">
-        ${s.name}
-        </option>`
-        ).join("");
+        `<option value="">Select State</option>`+
+        asmStates.map(function(s){
+            return `<option value="${s.id}">${s.name}</option>`;
+        }).join("");
 
     document.getElementById("asmTrueAnswer").innerHTML=options;
     document.getElementById("asmFalseAnswer").innerHTML=options;
@@ -1192,15 +1123,12 @@ function renderASM(){
 function newASMQuestion(){
 
     if(asmRules.length===0){
-
         alert("No ASM practice rules available.");
         return;
     }
 
     currentASMRule=
-        asmRules[
-            Math.floor(Math.random()*asmRules.length)
-        ];
+        asmRules[Math.floor(Math.random()*asmRules.length)];
 
     document.getElementById("asmPresent").value=
         currentASMRule.state;
@@ -1220,7 +1148,6 @@ function newASMQuestion(){
 function checkASM(){
 
     if(!currentASMRule){
-
         newASMQuestion();
         return;
     }
@@ -1254,4 +1181,1234 @@ function checkASM(){
         document.getElementById("asmFeedback").className=
             "feedback correct";
 
-        d
+        document.getElementById("asmFeedback").textContent=
+            "✓ Correct!";
+
+    }else{
+
+        document.getElementById("asmFeedback").className=
+            "feedback wrong";
+
+        document.getElementById("asmFeedback").textContent=
+            "✗ Incorrect. Try the next question.";
+    }
+
+    document.getElementById("asmScore").textContent=asmScore;
+    document.getElementById("asmAttempts").textContent=asmAttempts;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Core Digital Logic | FSM & ASM</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#07111f;
+    color:#eef5ff;
+}
+
+header{
+    text-align:center;
+    padding:42px 20px;
+    background:linear-gradient(135deg,#102844,#173f68);
+    border-bottom:1px solid #37658f;
+}
+
+header h1{
+    margin:0;
+    font-size:32px;
+    letter-spacing:1px;
+}
+
+header p{
+    margin:10px 0 0;
+    color:#b9cce3;
+}
+
+.container{
+    width:92%;
+    max-width:1050px;
+    margin:28px auto;
+}
+
+.options{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-bottom:22px;
+}
+
+.option{
+    background:#0d1d31;
+    border:1px solid #315477;
+    border-radius:16px;
+    padding:24px 15px;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.option:hover{
+    transform:translateY(-3px);
+    border-color:#69adff;
+}
+
+.option.active{
+    background:#122b47;
+    border-color:#69adff;
+}
+
+.icon{
+    font-size:30px;
+}
+
+.option h2{
+    font-size:18px;
+    margin:9px 0 5px;
+}
+
+.option p{
+    color:#9eb4cc;
+    font-size:13px;
+}
+
+.section{
+    display:none;
+    background:#0c1a2d;
+    border:1px solid #29496d;
+    border-radius:16px;
+    padding:27px;
+    margin-bottom:20px;
+}
+
+.section.active{
+    display:block;
+}
+
+h2{
+    color:#69adff;
+}
+
+h3{
+    color:#c6ddf6;
+}
+
+p,li{
+    color:#c2d1e2;
+    line-height:1.65;
+}
+
+.box{
+    background:#071322;
+    border:1px solid #315477;
+    border-radius:10px;
+    padding:16px;
+    margin:14px 0;
+}
+
+.highlight{
+    border-left:4px solid #69adff;
+    background:#102943;
+    padding:15px;
+    border-radius:8px;
+}
+
+.flow{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:22px 0;
+}
+
+.state{
+    padding:14px 24px;
+    background:#153554;
+    border:2px solid #62aaff;
+    border-radius:9px;
+    font-weight:bold;
+}
+
+.arrow{
+    color:#69adff;
+    font-size:22px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin:15px 0;
+}
+
+th,td{
+    border:1px solid #315477;
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#183957;
+}
+
+td{
+    background:#091829;
+}
+
+.practice{
+    border-color:#3d765f;
+}
+
+.practice h2{
+    color:#57dc99;
+}
+
+.practice-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+label{
+    display:block;
+    color:#9fb6ce;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+select,input{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #365b80;
+    background:#071322;
+    color:white;
+    font-size:14px;
+}
+
+button{
+    padding:10px 17px;
+    border:0;
+    border-radius:8px;
+    background:#287be0;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    margin:5px 3px 5px 0;
+}
+
+button:hover{
+    opacity:.85;
+}
+
+.green{
+    background:#21865b;
+}
+
+.gray{
+    background:#40556b;
+}
+
+.feedback{
+    min-height:25px;
+    margin:15px 0;
+    font-weight:bold;
+}
+
+.correct{
+    color:#4be09a;
+}
+
+.wrong{
+    color:#ff7272;
+}
+
+.score{
+    color:#ffd166;
+    font-size:18px;
+    margin-top:10px;
+}
+
+.editor{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.item{
+    display:flex;
+    gap:6px;
+    margin:7px 0;
+}
+
+.decision{
+    width:150px;
+    height:75px;
+    background:#3b3157;
+    border:2px solid #ae91ff;
+    transform:skew(-15deg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.decision span{
+    transform:skew(15deg);
+}
+
+.branch{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.trueBox{
+    border-left:4px solid #48d995;
+}
+
+.falseBox{
+    border-left:4px solid #ff7474;
+}
+
+@media(max-width:750px){
+
+    .options{
+        grid-template-columns:1fr;
+    }
+
+    .practice-grid,
+    .editor,
+    .branch{
+        grid-template-columns:1fr;
+    }
+
+    header h1{
+        font-size:25px;
+    }
+
+    .section{
+        padding:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>CORE DIGITAL LOGIC</h1>
+    <p>FSM & ASM Interactive Learning and Practice</p>
+</header>
+
+<div class="container">
+
+<!-- MAIN OPTIONS -->
+
+<div class="options">
+
+    <div class="option active" onclick="showSection('core',this)">
+        <div class="icon">⚙️</div>
+        <h2>CORE DIGITAL LOGIC</h2>
+        <p>Sequential logic fundamentals</p>
+    </div>
+
+    <div class="option" onclick="showSection('fsm',this)">
+        <div class="icon">🔷</div>
+        <h2>FSM</h2>
+        <p>Finite State Machine + Practice</p>
+    </div>
+
+    <div class="option" onclick="showSection('asm',this)">
+        <div class="icon">🔶</div>
+        <h2>ASM</h2>
+        <p>Algorithmic State Machine + Practice</p>
+    </div>
+
+</div>
+
+
+<!-- CORE DIGITAL LOGIC -->
+
+<section id="core" class="section active">
+
+<h2>Core Digital Logic</h2>
+
+<div class="highlight">
+<strong>Sequential Logic</strong>
+<p>
+A sequential circuit produces its output based on the present
+input and the stored previous state.
+</p>
+</div>
+
+<h3>Basic Sequential Structure</h3>
+
+<div class="flow">
+<div class="state">Input</div>
+<div class="arrow">→</div>
+<div class="state">Next-State Logic</div>
+<div class="arrow">→</div>
+<div class="state">State Register</div>
+<div class="arrow">→</div>
+<div class="state">Current State</div>
+</div>
+
+<h3>Clock</h3>
+
+<p>
+In a synchronous sequential circuit, the state register changes
+according to the clock signal.
+</p>
+
+<h3>Core Concepts</h3>
+
+<ul>
+<li>Combinational logic</li>
+<li>Sequential logic</li>
+<li>State</li>
+<li>State transition</li>
+<li>Clock</li>
+<li>State register</li>
+</ul>
+
+<h3>FSM and ASM</h3>
+
+<div class="box">
+
+<strong>FSM:</strong>
+Represents states and transitions of a sequential system.
+
+<br><br>
+
+<strong>ASM:</strong>
+Represents the algorithmic operation of a sequential system
+using states, decisions and conditional operations.
+
+</div>
+
+</section>
+
+
+<!-- FSM -->
+
+<section id="fsm" class="section">
+
+<h2>Finite State Machine (FSM)</h2>
+
+<div class="box">
+
+<h3>What is FSM?</h3>
+
+<p>
+A Finite State Machine is a model of a sequential system that
+uses a finite number of states and transitions between states.
+The transition depends on the input and the present state.
+</p>
+
+</div>
+
+<h3>FSM Structure</h3>
+
+<div class="flow">
+
+<div class="state">Present State</div>
+<div class="arrow">→</div>
+<div class="state">Input</div>
+<div class="arrow">→</div>
+<div class="state">Next State</div>
+
+</div>
+
+<h3>Example State Diagram</h3>
+
+<div class="flow">
+
+<div class="state">A</div>
+<div class="arrow">→</div>
+<div class="state">B</div>
+<div class="arrow">→</div>
+<div class="state">C</div>
+<div class="arrow">→</div>
+<div class="state">A</div>
+
+</div>
+
+<h3>State Transition Table</h3>
+
+<table>
+
+<tr>
+<th>Present State</th>
+<th>Input</th>
+<th>Next State</th>
+</tr>
+
+<tr>
+<td>A</td>
+<td>X</td>
+<td>B</td>
+</tr>
+
+<tr>
+<td>B</td>
+<td>X</td>
+<td>C</td>
+</tr>
+
+<tr>
+<td>C</td>
+<td>X</td>
+<td>A</td>
+</tr>
+
+</table>
+
+<h3>Moore vs Mealy</h3>
+
+<div class="editor">
+
+<div class="box">
+<strong>Moore Machine</strong>
+<p>
+Output depends only on the present state.
+</p>
+</div>
+
+<div class="box">
+<strong>Mealy Machine</strong>
+<p>
+Output depends on the present state and input.
+</p>
+</div>
+
+</div>
+
+<h3>Synchronous FSM</h3>
+
+<p>
+In a synchronous FSM, state transitions are controlled by a
+clock signal.
+</p>
+
+
+<!-- FSM PRACTICE -->
+
+<div class="box practice">
+
+<h2>🎯 FSM Practice</h2>
+
+<p>
+Create your own FSM states and inputs. A maximum of
+<strong>10 states</strong> can be used.
+</p>
+
+<div class="editor">
+
+<div>
+
+<h3>States <small>(2–10)</small></h3>
+
+<div id="fsmStates"></div>
+
+<button onclick="addFSMState()">＋ Add State</button>
+
+</div>
+
+<div>
+
+<h3>Inputs</h3>
+
+<div id="fsmInputs"></div>
+
+<button onclick="addFSMInput()">＋ Add Input</button>
+
+</div>
+
+</div>
+
+<h3>Practice Question</h3>
+
+<div class="practice-grid">
+
+<div>
+<label>Present State</label>
+<select id="fsmPresent"></select>
+</div>
+
+<div>
+<label>Input</label>
+<select id="fsmInputQuestion"></select>
+</div>
+
+<div>
+<label>Your Next State</label>
+<select id="fsmAnswer"></select>
+</div>
+
+</div>
+
+<button class="green" onclick="checkFSM()">
+CHECK ANSWER
+</button>
+
+<button class="gray" onclick="newFSMQuestion()">
+NEXT QUESTION
+</button>
+
+<div id="fsmFeedback" class="feedback"></div>
+
+<div class="score">
+Score:
+<span id="fsmScore">0</span>
+/
+<span id="fsmAttempts">0</span>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ASM -->
+
+<section id="asm" class="section">
+
+<h2>Algorithmic State Machine (ASM)</h2>
+
+<div class="box">
+
+<h3>What is ASM?</h3>
+
+<p>
+An Algorithmic State Machine is a flowchart-like representation
+used to describe the operation of a synchronous sequential
+digital system.
+</p>
+
+</div>
+
+<h3>ASM Elements</h3>
+
+<div class="editor">
+
+<div class="box">
+<strong>State Box</strong>
+<p>
+Represents the operations performed in a state.
+</p>
+</div>
+
+<div class="box">
+<strong>Decision Box</strong>
+<p>
+Represents a condition that determines the next path.
+</p>
+</div>
+
+</div>
+
+<div class="editor">
+
+<div class="box">
+<strong>Conditional Output</strong>
+<p>
+Represents an operation performed only when a condition is true.
+</p>
+</div>
+
+<div class="box">
+<strong>Transition</strong>
+<p>
+Shows movement from one state to another.
+</p>
+</div>
+
+</div>
+
+<h3>ASM Chart</h3>
+
+<div class="flow">
+
+<div class="state">STATE A</div>
+
+<div class="arrow">↓</div>
+
+<div class="decision">
+<span>Condition?</span>
+</div>
+
+</div>
+
+<div class="branch">
+
+<div class="box trueBox">
+<strong>TRUE</strong>
+<br><br>
+Next State → B
+</div>
+
+<div class="box falseBox">
+<strong>FALSE</strong>
+<br><br>
+Next State → C
+</div>
+
+</div>
+
+<h3>ASM Flow</h3>
+
+<div class="flow">
+
+<div class="state">State</div>
+<div class="arrow">→</div>
+<div class="state">Decision</div>
+<div class="arrow">→</div>
+<div class="state">Branch</div>
+<div class="arrow">→</div>
+<div class="state">Next State</div>
+
+</div>
+
+
+<!-- ASM PRACTICE -->
+
+<div class="box practice">
+
+<h2>🎯 ASM Practice</h2>
+
+<p>
+Create your own ASM states and conditions. A maximum of
+<strong>10 states</strong> can be used.
+</p>
+
+<div class="editor">
+
+<div>
+
+<h3>States <small>(2–10)</small></h3>
+
+<div id="asmStates"></div>
+
+<button onclick="addASMState()">＋ Add State</button>
+
+</div>
+
+<div>
+
+<h3>Conditions</h3>
+
+<div id="asmConditions"></div>
+
+<button onclick="addASMCondition()">＋ Add Condition</button>
+
+</div>
+
+</div>
+
+<h3>Practice Question</h3>
+
+<div class="practice-grid">
+
+<div>
+<label>Present State</label>
+<select id="asmPresent"></select>
+</div>
+
+<div>
+<label>Condition</label>
+<select id="asmConditionQuestion"></select>
+</div>
+
+<div>
+<label>TRUE → Next State</label>
+<select id="asmTrueAnswer"></select>
+</div>
+
+<div>
+<label>FALSE → Next State</label>
+<select id="asmFalseAnswer"></select>
+</div>
+
+</div>
+
+<button class="green" onclick="checkASM()">
+CHECK ANSWER
+</button>
+
+<button class="gray" onclick="newASMQuestion()">
+NEXT QUESTION
+</button>
+
+<div id="asmFeedback" class="feedback"></div>
+
+<div class="score">
+Score:
+<span id="asmScore">0</span>
+/
+<span id="asmAttempts">0</span>
+</div>
+
+</div>
+
+
+<h3>FSM and ASM Difference</h3>
+
+<table>
+
+<tr>
+<th>FSM</th>
+<th>ASM</th>
+</tr>
+
+<tr>
+<td>Shows states and transitions</td>
+<td>Shows algorithmic operation</td>
+</tr>
+
+<tr>
+<td>State diagram is commonly used</td>
+<td>ASM chart is commonly used</td>
+</tr>
+
+<tr>
+<td>Focuses on state behaviour</td>
+<td>Shows states, decisions and operations</td>
+</tr>
+
+</table>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* SECTION SWITCHING */
+
+function showSection(id,element){
+
+    document.querySelectorAll(".section").forEach(function(section){
+        section.classList.remove("active");
+    });
+
+    document.querySelectorAll(".option").forEach(function(option){
+        option.classList.remove("active");
+    });
+
+    var selectedSection = document.getElementById(id);
+
+    if(selectedSection){
+        selectedSection.classList.add("active");
+    }
+
+    if(element){
+        element.classList.add("active");
+    }
+}
+
+
+/* FSM DATA */
+
+let fsmStates=[
+    {id:1,name:"State A"},
+    {id:2,name:"State B"},
+    {id:3,name:"State C"}
+];
+
+let fsmInputs=[
+    {id:1,name:"Input X"},
+    {id:2,name:"Input Y"}
+];
+
+let fsmRules=[
+    {state:1,input:1,next:2},
+    {state:2,input:1,next:3},
+    {state:3,input:1,next:1},
+    {state:1,input:2,next:1},
+    {state:2,input:2,next:2},
+    {state:3,input:2,next:3}
+];
+
+let fsmScore=0;
+let fsmAttempts=0;
+let currentFSMRule=null;
+
+
+/* ADD FSM STATE */
+
+function addFSMState(){
+
+    if(fsmStates.length>=10){
+        alert("Maximum 10 states allowed.");
+        return;
+    }
+
+    let id=Date.now()+Math.random();
+
+    fsmStates.push({
+        id:id,
+        name:"State "+String.fromCharCode(65+fsmStates.length)
+    });
+
+    renderFSM();
+}
+
+
+/* ADD FSM INPUT */
+
+function addFSMInput(){
+
+    let id=Date.now()+Math.random();
+
+    fsmInputs.push({
+        id:id,
+        name:"Input "+(fsmInputs.length+1)
+    });
+
+    renderFSM();
+}
+
+
+/* RENDER FSM */
+
+function renderFSM(){
+
+    let statesBox=document.getElementById("fsmStates");
+    let inputsBox=document.getElementById("fsmInputs");
+
+    statesBox.innerHTML="";
+    inputsBox.innerHTML="";
+
+    fsmStates.forEach(function(state,index){
+
+        statesBox.innerHTML+=`
+        <div class="item">
+        <input
+        value="${state.name}"
+        onchange="fsmStates[${index}].name=this.value">
+        </div>
+        `;
+
+    });
+
+    fsmInputs.forEach(function(input,index){
+
+        inputsBox.innerHTML+=`
+        <div class="item">
+        <input
+        value="${input.name}"
+        onchange="fsmInputs[${index}].name=this.value">
+        </div>
+        `;
+
+    });
+
+    document.getElementById("fsmPresent").innerHTML=
+        fsmStates.map(function(s){
+            return `<option value="${s.id}">${s.name}</option>`;
+        }).join("");
+
+    document.getElementById("fsmInputQuestion").innerHTML=
+        fsmInputs.map(function(i){
+            return `<option value="${i.id}">${i.name}</option>`;
+        }).join("");
+
+    document.getElementById("fsmAnswer").innerHTML=
+        `<option value="">Select Next State</option>`+
+        fsmStates.map(function(s){
+            return `<option value="${s.id}">${s.name}</option>`;
+        }).join("");
+}
+
+
+/* NEW FSM QUESTION */
+
+function newFSMQuestion(){
+
+    if(fsmRules.length===0){
+        alert("No FSM practice rules available.");
+        return;
+    }
+
+    currentFSMRule=
+        fsmRules[Math.floor(Math.random()*fsmRules.length)];
+
+    document.getElementById("fsmPresent").value=
+        currentFSMRule.state;
+
+    document.getElementById("fsmInputQuestion").value=
+        currentFSMRule.input;
+
+    document.getElementById("fsmAnswer").value="";
+
+    document.getElementById("fsmFeedback").textContent="";
+}
+
+
+/* CHECK FSM */
+
+function checkFSM(){
+
+    if(!currentFSMRule){
+        newFSMQuestion();
+        return;
+    }
+
+    let answer=
+        document.getElementById("fsmAnswer").value;
+
+    if(!answer){
+
+        document.getElementById("fsmFeedback").className=
+            "feedback wrong";
+
+        document.getElementById("fsmFeedback").textContent=
+            "Please select a next state.";
+
+        return;
+    }
+
+    fsmAttempts++;
+
+    if(Number(answer)===currentFSMRule.next){
+
+        fsmScore++;
+
+        document.getElementById("fsmFeedback").className=
+            "feedback correct";
+
+        document.getElementById("fsmFeedback").textContent=
+            "✓ Correct!";
+
+    }else{
+
+        document.getElementById("fsmFeedback").className=
+            "feedback wrong";
+
+        document.getElementById("fsmFeedback").textContent=
+            "✗ Incorrect. Try the next question.";
+    }
+
+    document.getElementById("fsmScore").textContent=fsmScore;
+    document.getElementById("fsmAttempts").textContent=fsmAttempts;
+}
+
+
+/* ASM DATA */
+
+let asmStates=[
+    {id:1,name:"State A"},
+    {id:2,name:"State B"},
+    {id:3,name:"State C"}
+];
+
+let asmConditions=[
+    {id:1,name:"Condition X"},
+    {id:2,name:"Condition Y"}
+];
+
+let asmRules=[
+    {state:1,condition:1,trueNext:2,falseNext:3},
+    {state:2,condition:2,trueNext:3,falseNext:1},
+    {state:3,condition:1,trueNext:1,falseNext:2}
+];
+
+let asmScore=0;
+let asmAttempts=0;
+let currentASMRule=null;
+
+
+/* ADD ASM STATE */
+
+function addASMState(){
+
+    if(asmStates.length>=10){
+        alert("Maximum 10 states allowed.");
+        return;
+    }
+
+    let id=Date.now()+Math.random();
+
+    asmStates.push({
+        id:id,
+        name:"State "+String.fromCharCode(65+asmStates.length)
+    });
+
+    renderASM();
+}
+
+
+/* ADD ASM CONDITION */
+
+function addASMCondition(){
+
+    let id=Date.now()+Math.random();
+
+    asmConditions.push({
+        id:id,
+        name:"Condition "+(asmConditions.length+1)
+    });
+
+    renderASM();
+}
+
+
+/* RENDER ASM */
+
+function renderASM(){
+
+    let statesBox=document.getElementById("asmStates");
+    let conditionsBox=document.getElementById("asmConditions");
+
+    statesBox.innerHTML="";
+    conditionsBox.innerHTML="";
+
+    asmStates.forEach(function(state,index){
+
+        statesBox.innerHTML+=`
+        <div class="item">
+        <input
+        value="${state.name}"
+        onchange="asmStates[${index}].name=this.value">
+        </div>
+        `;
+
+    });
+
+    asmConditions.forEach(function(condition,index){
+
+        conditionsBox.innerHTML+=`
+        <div class="item">
+        <input
+        value="${condition.name}"
+        onchange="asmConditions[${index}].name=this.value">
+        </div>
+        `;
+
+    });
+
+    document.getElementById("asmPresent").innerHTML=
+        asmStates.map(function(s){
+            return `<option value="${s.id}">${s.name}</option>`;
+        }).join("");
+
+    document.getElementById("asmConditionQuestion").innerHTML=
+        asmConditions.map(function(c){
+            return `<option value="${c.id}">${c.name}</option>`;
+        }).join("");
+
+    let options=
+        `<option value="">Select State</option>`+
+        asmStates.map(function(s){
+            return `<option value="${s.id}">${s.name}</option>`;
+        }).join("");
+
+    document.getElementById("asmTrueAnswer").innerHTML=options;
+    document.getElementById("asmFalseAnswer").innerHTML=options;
+}
+
+
+/* NEW ASM QUESTION */
+
+function newASMQuestion(){
+
+    if(asmRules.length===0){
+        alert("No ASM practice rules available.");
+        return;
+    }
+
+    currentASMRule=
+        asmRules[Math.floor(Math.random()*asmRules.length)];
+
+    document.getElementById("asmPresent").value=
+        currentASMRule.state;
+
+    document.getElementById("asmConditionQuestion").value=
+        currentASMRule.condition;
+
+    document.getElementById("asmTrueAnswer").value="";
+    document.getElementById("asmFalseAnswer").value="";
+
+    document.getElementById("asmFeedback").textContent="";
+}
+
+
+/* CHECK ASM */
+
+function checkASM(){
+
+    if(!currentASMRule){
+        newASMQuestion();
+        return;
+    }
+
+    let trueAnswer=
+        document.getElementById("asmTrueAnswer").value;
+
+    let falseAnswer=
+        document.getElementById("asmFalseAnswer").value;
+
+    if(!trueAnswer || !falseAnswer){
+
+        document.getElementById("asmFeedback").className=
+            "feedback wrong";
+
+        document.getElementById("asmFeedback").textContent=
+            "Please select both TRUE and FALSE next states.";
+
+        return;
+    }
+
+    asmAttempts++;
+
+    if(
+        Number(trueAnswer)===currentASMRule.trueNext &&
+        Number(falseAnswer)===currentASMRule.falseNext
+    ){
+
+        asmScore++;
+
+        document.getElementById("asmFeedback").className=
+            "feedback correct";
+
+        document.getElementById("asmFeedback").textContent=
+            "✓ Correct!";
+
+    }else{
+
+        document.getElementById("asmFeedback").className=
+            "feedback wrong";
+
+        document.getElementById("asmFeedback").textContent=
+            "✗ Incorrect. Try the next question.";
+    }
+
+    document.getElementById("asmScore").textContent=asmScore;
+    document.getElementById("asmAttempts").textContent=asmAttempts;
+}
+/* INITIALIZE */
+
+window.onload=function(){
+
+    renderFSM();
+    renderASM();
+
+    newFSMQuestion();
+    newASMQuestion();
+
+};
+
+</script>
+
+</body>
+</html>
