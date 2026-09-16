@@ -1,9 +1,10 @@
 # Sequential Sensor Fault Monitor
-🌐 Live Project Website
 
-https://sumaiyah2503.github.io/Sequential-Sensor-Fault-Monitor/
+-Core digital logic - syllabus concepts
 
-🔬 Sensor Monitor Software
+https://sumaiyah2503.github.io/Sequential-Sensor-Fault-Monitor/core-logic.html
+
+-Sensor Monitor Software
 
 https://sumaiyah2503.github.io/Sequential-Sensor-Fault-Monitor/sensor-monitor.html
 
