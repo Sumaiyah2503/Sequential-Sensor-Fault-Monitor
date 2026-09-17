@@ -2364,95 +2364,54 @@ function newASMQuestion() {
 function checkASM(){
 
     if(!currentASMQuestion){
-
         return;
     }
 
-
-    const trueSelected =
-        Number(
-            document.getElementById(
-                "asmTrueAnswer"
-            ).value
-        );
-
-
-    const falseSelected =
-        Number(
-            document.getElementById(
-                "asmFalseAnswer"
-            ).value
-        );
-
+    const selected =
+        document.getElementById("asmAnswer").value;
 
     asmAttempts++;
 
-
     const correct =
-        trueSelected ===
-        currentASMQuestion.trueNext
-        &&
-        falseSelected ===
-        currentASMQuestion.falseNext;
-
+        (selected === "true") ===
+        currentASMQuestion.conditionResult;
 
     const feedback =
-        document.getElementById(
-            "asmFeedback"
-        );
+        document.getElementById("asmFeedback");
 
+    if(correct){
 
-       if(correct){
+        asmScore++;
 
-    asmScore++;
+        feedback.className =
+            "feedback correct";
 
-    feedback.className =
-        "feedback correct";
+        feedback.innerHTML =
+            "✅ Correct! You selected the correct path.";
 
-    feedback.innerHTML =
-        "✅ Correct! Both TRUE and FALSE transitions are correct.";
+    }
+    else{
 
-}
+        feedback.className =
+            "feedback wrong";
 
-else{
+        const correctPath =
+            currentASMQuestion.conditionResult
+            ? "TRUE"
+            : "FALSE";
 
-    feedback.className =
-        "feedback wrong";
-
-    const trueState =
-        asmStates.find(
-            s =>
-            s.id ===
-            currentASMQuestion.trueNext
-        );
-
-    const falseState =
-        asmStates.find(
-            s =>
-            s.id ===
-            currentASMQuestion.falseNext
-        );
-
-    feedback.innerHTML =
-        "❌ Incorrect. TRUE → " +
-        trueState.name +
-        " | FALSE → " +
-        falseState.name;
+        feedback.innerHTML =
+            "❌ Incorrect. The correct path is " +
+            correctPath + ".";
 
     }
 
-    document.getElementById(
-        "asmScore"
-    ).textContent =
+    document.getElementById("asmScore").textContent =
         asmScore;
 
-    document.getElementById(
-        "asmAttempts"
-    ).textContent =
+    document.getElementById("asmAttempts").textContent =
         asmAttempts;
-
 }
-
 
 /* =====================================================
    PAGE LOAD
