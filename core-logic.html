@@ -1251,52 +1251,33 @@ Practice Question
 
 <div class="practice-grid">
 
-
 <div>
-
-<label>
-Present State
-</label>
-
+<label>Present State</label>
 <select id="asmPresent"></select>
-
 </div>
 
-
 <div>
-
-<label>
-Condition
-</label>
-
+<label>Condition</label>
 <select id="asmConditionQuestion"></select>
-
 </div>
-
 
 <div>
-
-<label>
-TRUE → Next State
-</label>
-
-<select id="asmTrueAnswer"></select>
-
+<label>Input</label>
+<select id="asmInputQuestion">
+<option value="1">X = 1</option>
+<option value="0">X = 0</option>
+</select>
 </div>
-
 
 <div>
-
-<label>
-FALSE → Next State
-</label>
-
-<select id="asmFalseAnswer"></select>
-
+<label>Choose Path</label>
+<select id="asmAnswer">
+<option value="true">TRUE</option>
+<option value="false">FALSE</option>
+</select>
 </div>
 
 </div>
-
 
 <button class="green"
         onclick="checkASM()">
