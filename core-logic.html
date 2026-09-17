@@ -2302,110 +2302,58 @@ function updateASMSelects(){
    NEW ASM QUESTION
 ===================================================== */
 
-function newASMQuestion(){
+function newASMQuestion() {
+    const state = asmStates[Math.floor(Math.random() * asmStates.length)];
+    const condition = asmConditions[Math.floor(Math.random() * asmConditions.length)];
 
-    if(asmStates.length === 0 ||
-       asmConditions.length === 0){
+    // Random input
+    const input = Math.random() < 0.5 ? "1" : "0";
 
+    // Check whether condition is true
+    let conditionResult;
+
+    if (condition.name === "X = 1") {
+        conditionResult = input === "1";
+    } else if (condition.name === "X = 0") {
+        conditionResult = input === "0";
+    } else {
+        conditionResult = Math.random() < 0.5;
+    }
+
+    // Find matching ASM rule
+    const rule = asmRules.find(
+        r => r.state === state.id && r.condition === condition.id
+    );
+
+    if (!rule) {
         return;
     }
 
+    currentASMQuestion = {
+        state: state.id,
+        condition: condition.id,
+        input: input,
+        conditionResult: conditionResult,
+        trueNext: rule.trueNext,
+        falseNext: rule.falseNext
+    };
 
-    const state =
-        asmStates[
-            Math.floor(
-                Math.random() *
-                asmStates.length
-            )
-        ];
+    document.getElementById("asmPresent").value = state.id;
+    document.getElementById("asmConditionQuestion").value = condition.id;
+    document.getElementById("asmInputQuestion").value = input;
 
+    const answer = document.getElementById("asmAnswer");
 
-    const condition =
-        asmConditions[
-            Math.floor(
-                Math.random() *
-                asmConditions.length
-            )
-        ];
+    answer.innerHTML = `
+        <option value="true">
+            TRUE → ${asmStates.find(s => s.id === rule.trueNext).name}
+        </option>
+        <option value="false">
+            FALSE → ${asmStates.find(s => s.id === rule.falseNext).name}
+        </option>
+    `;
 
-
-    let rule =
-        asmRules.find(
-            r =>
-            r.state === state.id &&
-            r.condition === condition.id
-        );
-
-
-    /*
-       If there is no predefined rule,
-       create a random practice rule.
-    */
-
-    if(!rule){
-
-        const trueState =
-            asmStates[
-                Math.floor(
-                    Math.random() *
-                    asmStates.length
-                )
-            ];
-
-
-        const falseState =
-            asmStates[
-                Math.floor(
-                    Math.random() *
-                    asmStates.length
-                )
-            ];
-
-
-        rule = {
-
-            state:state.id,
-
-            condition:condition.id,
-
-            trueNext:trueState.id,
-
-            falseNext:falseState.id
-
-        };
-
-    }
-
-
-    currentASMQuestion = rule;
-
-
-    document.getElementById(
-        "asmPresent"
-    ).value =
-        state.id;
-
-
-    document.getElementById(
-        "asmConditionQuestion"
-    ).value =
-        condition.id;
-
-
-    document.getElementById(
-        "asmTrueAnswer"
-    ).selectedIndex = 0;
-
-
-    document.getElementById(
-        "asmFalseAnswer"
-    ).selectedIndex = 0;
-
-
-    document.getElementById(
-        "asmFeedback"
-    ).innerHTML = "";
-
+    document.getElementById("asmFeedback").textContent = "";
 }
 
 
